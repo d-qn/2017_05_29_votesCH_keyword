@@ -1,0 +1,95 @@
+---
+title: "viz"
+author: "Duc-Quang Nguyen | swissinfo.ch"
+date: " 2017"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    theme: simplex
+---
+
+```{r setup, include=FALSE}
+
+data.file <- "data/VOTES_2017_05_30_clean.csv"
+
+library(tidyverse)
+library(scales)
+library(magrittr)
+library(countrycode)
+library(swiMap)
+library(swiTheme)
+
+### Interactive 
+library(htmltools)
+library(shiny)
+library(swiRcharts)
+library(ggiraph)
+require(viridis)
+```
+
+
+```{r load data}
+data <- read_csv(data.file)
+
+# get the keywords weighting factor (how many "none")
+data$kw_multiplier <- apply(data, 1, function(ll) length(grep("none", ll[c("keyword1", "keyword2", "keyword3")])))
+keywords <- data %>% select(starts_with("keyword")) %>% unlist() %>% table() %>% sort(decreasing = T)
+keywords <- keywords[-which(names(keywords) == "none")]
+
+# make data long
+datal <- data %>% select(`Number of Vote`, keyword1, keyword2, keyword3) %>%
+   gather(keyword_tmp, keyword, -`Number of Vote`) %>% select(-keyword_tmp) %>% 
+  arrange(`Number of Vote` ) %>% filter(keyword != "none")
+
+datal <- left_join(datal, data %>% select(-contains("keyword")))
+datal %<>% mutate(tbin = cut(`Date of Votes`, breaks = "10 years"))
+
+```
+
+```{r viz subset}
+kw.sub <- head(keywords, 20) %>% names()
+
+dd <- datal %>% select(`Number of Vote`, keyword, tbin, `Date of Votes`, `Yes [%]`) %>% 
+  filter(keyword %in% kw.sub)
+
+# get nmax number of votes for a given keyword and time bin
+count <- dd %>% group_by(keyword, tbin) %>% summarise(nmax = length(`Number of Vote`)) %>% 
+  ungroup() %>% arrange(desc(nmax))
+
+```
+
+
+```{r dev viz, fig.width= 12, fig.height = 16}
+## 
+
+ddd <- dd %>% arrange(`Date of Votes`) %>% 
+  group_by(keyword, tbin) %>% mutate(y = 1:length(`Number of Vote`)) %>% 
+  ungroup()
+
+ggplot(data = ddd, aes(x = tbin, y = y, fill = `Yes [%]`)) + 
+  geom_tile(colour = "white", size = 0.5) + swi_theme(y_gridlines = F) + 
+ # coord_fixed() +
+  scale_fill_gradient2(low = swi_col[8], high = swi_col[1], midpoint = 50) +
+  scale_x_discrete(name = "", labels = substr(levels(ddd$tbin), 1, 4), 
+                   drop = F) +
+  scale_y_continuous(name ="", breaks = NULL) + facet_wrap( ~ keyword)
+
+```
+
+
+```{r highcharter}
+library(highcharter)
+dddd <- ddd %>% filter(keyword == "Environmental policy") 
+
+hchart(ddd, "heatmap", 
+       hcaes(x = tbin, y = y, value = `Yes [%]`)) %>%
+   hc_colorAxis(min = 0, max  = 100, stops = list(
+		    list(0, swi_col[8]),
+		      list(49.99, '#f8eded'),
+		      list(50, '#dae9f1'),
+		      list(100, swi_col[1])
+   ))
+
+
+```

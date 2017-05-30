@@ -1,0 +1,116 @@
+---
+title: ""
+author: "Duc-Quang Nguyen | swissinfo.ch"
+date: " 2017"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    theme: simplex
+---
+
+# Data
+
+* In vote search pick, Switzerland in Country, run the search and download csv[csv link](http://c2d.ch/ref_export.php?lname=votes&table=votes&level=1&country=Array&type=csv)
+
+
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(scales)
+library(magrittr)
+library(countrycode)
+library(swiMap)
+library(swiTheme)
+
+### Getting data in packages
+library(rvest)
+
+data.file <- "data/VOTES_2017_05_30.csv"
+data.cleanfile <- paste0(gsub("\\.csv", "", data.file), "_clean.csv")
+
+```
+
+```{r get & fix data, include = F}
+data.read <- read_csv(data.file, locale = locale(encoding = "latin1"))
+
+# remove footer
+n_max<- min(which(is.na(data.read$`Date of Votes`))) - 1
+data.read <- read_delim(data.file, delim = ",", locale = locale(encoding = "latin1"), n_max = n_max) %>%
+  select(-Level, -Country)
+
+data <- data.read %>% 
+  select(-`Sl No`, -`Title in German`, -`Title in Italien`, -`Citizen Abroad`, 
+         -`Empty Ballot Sheets`, -`Invalid Ballot Sheets`, -`Number of Signatures`,
+         -`Number of Cantons attained (Referendum)`, -`Committee name`)
+
+### hack for broken csv
+idx <- which(!grepl ("\\|", data$`Theme codes`))
+tmp <- data %>% slice(idx) %>% select(Comments) %>% unlist()
+# get keywords
+tmp <- gsub('.*\\"(.*)$', "\\1", tmp)                     
+# shift columns from keywords on            
+as.data.frame(data[idx, c(which(colnames(data) == "Theme codes"):(ncol(data)-1))])
+
+data[idx, c((which(colnames(data) == "Theme codes")+1):ncol(data))] <- as.data.frame(data[idx, c(which(colnames(data) == "Theme codes"):(ncol(data)-1))])
+
+data[idx, which(colnames(data) == "Theme codes")] <- tmp
+```
+
+```{r theme code wrangle}
+codes <- strsplit(data$`Theme codes`, "\\|")
+idxf <- which(lapply(codes, length) != 3)
+if(length(idxf) > 0) {
+  data[idxf, 'Theme codes'] <- data %>% 
+    slice(idxf) %>% select(`Theme codes`) %>% unlist() %>% paste0(" | none")  
+}
+
+codes <- strsplit(data$`Theme codes`, " \\| ")
+stopifnot(lapply(codes, length) == 3)
+codes <- do.call(rbind, codes)
+colnames(codes) <- paste0("keyword", 1:3)
+
+as.vector(codes) %>% table() %>% sort()
+data <- cbind(data, codes, stringsAsFactors = F) %>% select(-Comments) 
+```
+
+```{r get the type of vote}
+# Create new column with vote type (3 types)
+### the different vote types
+# referendum obligatoire, referendum facultatif, initiative populaire, contre-projet de l'assemblée fédérale, see http://www.bfs.admin.ch/bfs/portal/fr/index/themen/17/03/blank/key/eidg__volksinitiativen.html
+
+type <- data %>% select(Institutions) %>% unlist(use.names = F)
+data$type <- case_when(
+  grepl('^Initiative', type, ignore.case = F) ~ 'initiative',
+  grepl('(Constitutional|Mandatory).*(Referendum|Initiative)', type, ignore.case = T) ~ 'mandatory Referendum',
+  grepl('Optional.*referendum', type, ignore.case = T) ~ 'facultative Referendum'
+) 
+# change column orders
+data %<>% select(-c(`Number of Yes-Votes in National Council`:`No [%]`), everything()) %>%
+  select(-c(`Number of Yes-Votes in National Council`:`Tie-Break Question: Without Response`), everything())
+
+write.csv(data, file = data.cleanfile, row.names = F)
+```
+
+
+```{r parse vote titles, include=F}
+# might need more cleaning of vote titles!!!
+library(tidytext)
+#http://tidytextmining.com/tidytext.html
+
+
+data %<>% 
+  mutate(title = gsub("(Federal decree on |Federal law .* regarding |Citizens.* initi?ative.* of.*[0-9]{4} | Amendment to |Federal parliamentary decree of .* regarding |Amendment of |Federal law on |Citizen's initiative )", "", `Title in English`))
+
+title_df <- data_frame(line = 1:627, text = data$title)
+tidy_title <- title_df %>%
+   unnest_tokens(word, text)
+
+tidy_title %<>%
+  left_join(get_sentiments("bing"))
+
+stitles <- tidy_title %>% group_by(line) %>% summarise(tmp_sentiment = paste0(ifelse(is.na(sentiment), "", sentiment), collapse = ",")) %>% ungroup()
+ #sapply(strsplit(stitles$tmp_sentiment, ","), function(xx) paste0(unique(xx), collapse = ""))
+```
+
+
