@@ -43,31 +43,32 @@ datal <- data %>% select(`Number of Vote`, keyword1, keyword2, keyword3) %>%
   arrange(`Number of Vote` ) %>% filter(keyword != "none")
 
 datal <- left_join(datal, data %>% select(-contains("keyword")))
-datal %<>% mutate(tbin = cut(`Date of Votes`, breaks = "10 years"))
+datal %<>% mutate(tbin = cut(`Date of Votes`, breaks = "10 years")) %>%
+  mutate(tbin = factor(substr(tbin, 1, 4)))
 
-```
+# trim the whole data
+dd <- datal %>% select(`Number of Vote`, `Title in English`, keyword, tbin, `Date of Votes`, 
+                       `Yes [%]`, `Result`, `type`, Turnout, `Number of States accepting`, `Number of States rejecting`) %>%
+  rename(voteID = `Number of Vote`, date = `Date of Votes`, yes_pc = `Yes [%]`, 
+         yes_nCanton = `Number of States accepting`, no_nCanton = `Number of States rejecting`)
 
-```{r viz subset}
-kw.sub <- head(keywords, 20) %>% names()
-
-dd <- datal %>% select(`Number of Vote`, keyword, tbin, `Date of Votes`, `Yes [%]`) %>% 
-  filter(keyword %in% kw.sub)
 
 # get nmax number of votes for a given keyword and time bin
-count <- dd %>% group_by(keyword, tbin) %>% summarise(nmax = length(`Number of Vote`)) %>% 
+count <- dd %>% group_by(keyword, tbin) %>% summarise(nmax = length(voteID)) %>% 
   ungroup() %>% arrange(desc(nmax))
 
+# aggregate data by time bin
+ddd <- dd %>% arrange(date) %>% 
+  group_by(keyword, tbin) %>% mutate(y = 1:length(voteID)) %>% 
+  ungroup()
 ```
 
 
-```{r dev viz, fig.width= 12, fig.height = 16}
-## 
+```{r explore viz, fig.width= 12, fig.height = 16}
+# viz subset top keywords
+kw.sub <- head(keywords, 20) %>% names()
 
-ddd <- dd %>% arrange(`Date of Votes`) %>% 
-  group_by(keyword, tbin) %>% mutate(y = 1:length(`Number of Vote`)) %>% 
-  ungroup()
-
-ggplot(data = ddd, aes(x = tbin, y = y, fill = `Yes [%]`)) + 
+ggplot(data = ddd %>% filter(keyword %in% kw.sub), aes(x = tbin, y = y, fill = `yes_pc`)) + 
   geom_tile(colour = "white", size = 0.5) + swi_theme(y_gridlines = F) + 
  # coord_fixed() +
   scale_fill_gradient2(low = swi_col[8], high = swi_col[1], midpoint = 50) +
@@ -77,19 +78,153 @@ ggplot(data = ddd, aes(x = tbin, y = y, fill = `Yes [%]`)) +
 
 ```
 
-
-```{r highcharter}
+```{r interactive small multiple}
 library(highcharter)
+
+lang <- 'EN'
+
+#head(keywords, 30) %>% names()
+kw.sub
+
+bg.colour <-  "#f3f3f2"
+chart.height <- 400
+stops <- data.frame(q = c(0, 0.4999, 0.5, 1), 
+                    c = c("#5d4622", '#e6dfd9', '#dbe1e1', "#224444"))
+
+cat.label <- levels(ddd$tbin)
+cat.label[-c(1, round(length(cat.label) / 4),
+             round((length(cat.label) / 4)*3), length(cat.label))] <- ""
+
+
+singlePlot <- function(ddd, kw) {
+  dddd <- ddd %>% filter(keyword == kw)   
+  
+  dddd$tp <- paste0(
+    '<table cellpadding="1" style="line-height:1.1">',
+    '<tr><td>', dddd$date, '</td>',
+    '<td></td><td>', dddd$type, '</td></tr>',
+    '<tr><td colspan="3"><i>', dddd$`Title in English`, '</i><hr></td></tr>',
+    '<tr><td>', "% yes", 
+    #trad["tp.yes",lang], 
+    ': <b>', round(dddd$yes_pc, 1), '%</b>', '</td><td></td>',
+    '<td>', "turnout",
+		#trad["tp.turnout",lang],  
+		": ",
+    ifelse(round(dddd$Turnout, 1) == 0, " ", paste0(round(dddd$Turnout, 1), "%")), '</td></tr>',
+		'<tr><td colspan="3" align="center"><div style="color:#999999">',
+		ifelse(dddd$Result == "no", "no", "yes"),
+		#trad["tp.refused",lang], trad["tp.accepted",lang]), 
+		'</td></tr>','</table>')
+
+  hc <- hchart(dddd, "heatmap", 
+               hcaes(x = tbin, y = y, value = yes_pc, tp = tp)) %>%
+    hc_colorAxis(min = 0, max  = 100, stops = list_parse2(stops)) %>%
+    hc_plotOptions(heatmap = list(borderWidth = 3, borderColor = bg.colour, 
+                                  borderRadius = 4)) %>%
+    hc_legend(enabled = F) %>%
+    hc_yAxis(gridLineWidth = 0, lineColor = 'transparent', max = max(count$nmax)-1, min = 2,
+             labels = list (enabled = F), title = "", opposite = ifelse(lang == "AR", T, F)) %>%
+    hc_xAxis(label = list(autoRotation = 0), categories = cat.label, uniqueNames = F,
+             gridLineWidth = 1,  title = "", tickLength = 2, #lineColor = 'transparent',
+             min = 0, max = nlevels(dddd$tbin)-1, reversed = ifelse(lang == "AR", T, F)) %>%
+    hc_add_theme(hc_theme_swi)
+  
+  hc2 <- hc %>% 
+    hc_add_series(dddd %>% filter(type == 'initiative'), "scatter", 
+                  hcaes(x = as.numeric(tbin)-1, y = y), 
+                  marker = list(symbol = "diamond", 
+                  radius = 4, lineWidth = 1.5), color = "#efe9e0")
+  
+  hc2 %>% hc_tooltip(hideDelay = 10, formatter = JS("function() { return this.point.tp; }"), useHTML = T,
+                            borderWidth = 2, backgroundColor = 'rgba(255,255,255,0.8)', style = list(padding = 3)) %>%
+    hc_chart(backgroundColor = bg.colour, height = chart.height)
+}
+ 
+plots <- lapply(kw.sub[1:12], function(kw) singlePlot(ddd, kw))
+#hw_grid(plots, ncol = 4, rowheight = chart.height + 10)%>% browsable()
+
+
+
+save_html(
+   tags$html(
+    tags$head(includeHTML(style_swi_highcharter())),
+    div(class="graphic", hw_grid(plots, ncol = 3, rowheight = chart.height + 1)),#,
+    #div(id = "cite", HTML(footer)),
+    HTML(iframeresizer)  
+  ), #background = "#EDEDED", 
+  file =  paste0("chVotes_byKeyword2_", lang, ".html"), libdir = "js")
+
+# save_html(
+#    tags$html(
+#  #     tags$head(includeHTML("styles.html")),
+#   fluidPage(
+#    # tags$h2(HTML("Différences de salaire par type de professsion et par âge")), #txt["main.title", lang]),
+#  #   div(class = "descr", HTML("Salaires moyens par tranches d'âge et professions en fonction du salaire moyen à moins de 30 ans")),
+#     #tags$h4(txt["h3", lang]),
+#     div(class="graphic", 
+#         fluidRow(lapply(1:length(plots), function(i) {
+#           column(3, div(class = "graphic",  plots[[i]]))
+#         }))#,
+#         #div(id = "cite", HTML(footer))
+#     ),
+#     HTML(iframeresizer)  
+#   )), #background = "#EDEDED", 
+#   file =  paste0("chVotes_byKeyword_", lang, ".html"), libdir = "js")
+  
+
+
+
+```
+
+```{r highcharter test, include = F}
+library(highcharter)
+
 dddd <- ddd %>% filter(keyword == "Environmental policy") 
 
-hchart(ddd, "heatmap", 
-       hcaes(x = tbin, y = y, value = `Yes [%]`)) %>%
-   hc_colorAxis(min = 0, max  = 100, stops = list(
-		    list(0, swi_col[8]),
-		      list(49.99, '#f8eded'),
-		      list(50, '#dae9f1'),
-		      list(100, swi_col[1])
-   ))
+dddd$tp <- paste0(
+				'<table cellpadding="1" style="line-height:1.1">',
+			        '<tr><td>', dddd$date, '</td>',
+						'<td></td><td>', dddd$type, '</td></tr>',
+			       '<tr><td colspan="3"><i>', dddd$`Title in English`, '</i><hr></td></tr>',
+			       '<tr><td>', "% yes", 
+				#trad["tp.yes",lang], 
+				': <b>', round(dddd$yes_pc, 1), '%</b>', '</td><td></td>',
+				   		'<td>', "turnout",
+				#trad["tp.turnout",lang],  
+				": ",
+						ifelse(round(dddd$Turnout, 1) == 0, " ", paste0(round(dddd$Turnout, 1), "%")), '</td></tr>',
+					'<tr><td colspan="3" align="center"><div style="color:#999999">',
+						ifelse(dddd$Result == "no", "no", "yes"),
+						       #trad["tp.refused",lang], trad["tp.accepted",lang]), 
+						       '</td></tr>',
+				'</table></div>')
 
+bg.colour <-  "white"
+stops <- data.frame(q = c(0, 0.4999, 0.5, 1), 
+                    c = c("#72302f", '#f8eded', '#dae9f1', "#193442"))
+
+hc <- hchart(dddd, "heatmap", 
+             hcaes(x = tbin, y = y, value = yes_pc, tp = tp)) %>%
+  hc_colorAxis(min = 0, max  = 100, stops = list_parse2(stops)) %>%
+  hc_plotOptions(heatmap = list(borderWidth = 3, borderColor = bg.colour, 
+                                borderRadius = 4)) %>%
+  hc_legend(enabled = F) %>%
+  hc_yAxis(gridLineWidth = 0, lineColor = 'transparent', max = max(count$nmax),
+           labels = list (enabled = F), title = "", opposite = ifelse(lang == "AR", T, F)) %>%
+  hc_xAxis(gridLineWidth = 0, lineColor = 'transparent', title = "", tickLength = 0, 
+           min = 0, max = nlevels(dddd$tbin)-1, reversed = ifelse(lang == "AR", T, F)) %>%
+  hc_add_theme(hc_theme_swi)
+
+hc2 <- hc %>% hc_add_series(dddd %>% filter(type == 'initiative'), "scatter", hcaes(x = as.numeric(tbin)-1, y = y), marker = list(symbol = "diamond", radius = 4, lineWidth = 1.5), color = "#efe9e0")
+
+hc3 <- hc2 %>% hc_tooltip(formatter = JS("function() { return this.point.tp; }"), useHTML = T,
+			borderWidth = 2, backgroundColor = 'rgba(255,255,255,0.8)', style = list(padding = 3)) %>%
+  hc_chart(backgroundColor = bg.colour)
+
+# hc4 <- hc3 %>% hc_add_annotation(
+#   xValue = -0.5, yValue = 13, 
+#   anchorX =  "left" , title = list(text = "Environmental policy", 
+#   style = list("color" =  "#beb298", "fontSize" = "3em"))
+# )
 
 ```
