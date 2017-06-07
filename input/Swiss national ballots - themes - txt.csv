@@ -1,0 +1,46 @@
+code,EN,FR,DE,IT,PT,AR,RU,ES,JA,ZH
+main.title,What are the themes Swiss voted on over time?,,,,,,,,,
+descr,"National ballots in Switzerland by theme and by 10 years brackets. Each ballot is represented by a <div id=""rectangle""></div> coloured according to the percentage of yes vote, ballots with a majority of ""no"" have different shades of <span style=""color:#72302f; font-weight:bold;"">red</span>. People's initiatives are marked with a  <div id=""diamond"" style=""background:
+#efe9e0""></div> (<div id=""diamond"" style=""background:#72302f""></div> for rejected initiatives). Each ballot was assigned between 1 to 3 keyword theme.",,,,,,,,,
+tp.yes,Yes,Ja,Oui,Sì,Sí,Sim,賛成,赞成,Да,نعم
+tp.turnout,Turnout,Stimmbeteiligung,Participation,Partecipazione,Participación,Participação,投票率,参与率,Участие,نسبة المشاركة
+tp.accepted,Accepted,angenommen,accepté,accettato,aceptado,aprovado,可決,通过,Одобрено,تمت الموافقة عليه
+tp.refused,Rejected,abgelehnt,rejeté,respinto,rechazado,rejeitado,否決,否决,Отклонено,تم رفضه
+title.initiative,People's initiatives,Volksinitiativen,Initiatives populaires,Iniziative popolari,Iniciativas populares,Iniciativas populares,イニシアチブ（国民発議）,公民动议,Народная законодательная инициатива,مبادرات شعبية
+title.mandatoryReferendum,Mandatory referendums,Obligatorische Referenden,Référendums obligatoires,Referendum obbligatori,Referéndums obligatorios,Referendo obrigatório,強制的レファレンダム,强制复决,Обязательный референдум,استفتاءات إجبارية
+title.facultativeReferendum,Optional referendums,Fakultative Referenden,Référendums facultatifs,Referendum facoltativi,Referéndums facultativos,Referendo facultativo,任意のレファレンダム,公民复决,Факультативный референдум,استفتاءات اختيارية
+tp.outcome,Outcome,,,,,,,,,
+source,Source,source,Quelle,Fonte,fonte,المصدر,Источник,Fuente,出典,来源
+source.name,Centre for Research on Direct Democracy (c2d),,,,,,,,,
+code,Code,code,Code,Codice,código,الرمز,Код,código,コード,代码
+code.name,Highcharter,,,,,,,,,
+Environmental_policy.key,Environmental policy,,,,,,,,,
+Environmental_policy.sub,Environment was a big theme in Swiss ballots over the last 40 years.<br><br><small>Note the different people's initiatives which got accepted.,,,,,,,,,
+Immigration_policy.key,Immigration policy,,,,,,,,,
+Immigration_policy.sub,"Lately, Swiss have been nearly as much concerned with the environment as with its rising immigrant population.<br><br><small>Note the two people's initiatives which got accepted by its citizens since 2010.",,,,,,,,,
+Status_of_women.key,Status of women,,,,,,,,,
+Status_of_women.sub,"Women's suffrage at the federal level was introduced only in 1971 with a mandatory referendum.<br><br>It was a prevalent theme since, although not all ballots here are about woman's emancipation. For instance, Swiss voted multiple times regarding abortion. ",,,,,,,,,
+Fundamental_rights.key,Fundamental rights,,,,,,,,,
+Fundamental_rights.sub,"A consistent popular theme in Swiss ballots.<br><br>But not all votes were to increase fundamental rights, for instance the last two people's initiatives accepted were to limit foreigners' rights.",,,,,,,,,
+Pension_insurance.key,Pension insurance,,,,,,,,,
+Pension_insurance.sub,"Faced with an ageing population, there have been numerous pension insurance ballots over the last 20 years.<br><br><small>With not much success, all people's initiatives regarding pension have been rejected.",,,,,,,,,
+Indirect_taxation.key,Indirect taxation,,,,,,,,,
+Indirect_taxation.sub,"Through people's initiatives, there have many attemps to change how to tax goods and services.<br><br><small>Without much success...",,,,,,,,,
+Intergovernmental_relations.key,Intergovernmental relations,,,,,,,,,
+Intergovernmental_relations.sub,"Given its federalism, Swiss regularly voted on the cantonal-country interplay.",,,,,,,,,
+Budget_cuts_and_remediation_measures.key,Budget cuts and remediation measures,,,,,,,,,
+Budget_cuts_and_remediation_measures.sub,&nbsp;,,,,,,,,,
+Children_and_young_people.key,Children and young people,,,,,,,,,
+Children_and_young_people.sub,Not much interest for children or youngs in the polls until recently,,,,,,,,,
+Arms.key,Arms,,,,,,,,,
+Arms.sub,Weapon trade has regularly come under the scrutiny of people's initiatives,,,,,,,,,
+National_economic_supply.key,National economic supply,,,,,,,,,
+National_economic_supply.sub,Food self-sufficiency used to be a thing.,,,,,,,,,
+Crop_production.key,Crop production,,,,,,,,,
+Crop_production.sub,&nbsp;,,,,,,,,,
+Referendum.key,Referendum,,,,,,,,,
+Referendum.sub,"Swiss like so much polls, they regularly voted on how to modifiy its direct democracy or its electoral system.",,,,,,,,,
+Electoral_system.key,Electoral system,,,,,,,,,
+Electoral_system.sub,&nbsp;,,,,,,,,,
+Government__administration.key,"Government, administration",,,,,,,,,
+Government__administration.sub,&nbsp;,,,,,,,,,

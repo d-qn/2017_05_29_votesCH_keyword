@@ -9,19 +9,55 @@ output:
     theme: simplex
 ---
 
+## Translation
 
+**vote names are matched according to their "Sl No"**
 
 
 ## Txt
 
+Since 1848, Swiss had their say over 600 nationwide ballots. swissinfo.ch looked
+
+
+Nearly half of the states in the world have some form of direct legislation. But Switzerland stands alone in how extensively it uses it. In most part of the world, referendums and initiatives remain rare. But Swiss go to polls for national votes about four times a year. To give their verdict on? swissinfo.ch looked at the ballot themes since 184 
+
+
+
+
+
+## Snippets
+
+Switzerland‟s first constitution of 1848 followed the principle of representation. It contained only two direct-democratic rights: the mandatory constitutional referendum and the popular ini- tiative for a complete revision of the federal constitution. The other popular rights were introduced gradually in a process which took many years. We have to consider them as concessions which the political elite had to make to opposition forces.
+
+
+
+basic distinction is made between popular initiatives and ref- erendums.
+
+The referendum, on the other hand, allows parliamentary decisions which have already been taken to be struck down or modified.8 Referendums can be subdivided into those which are obligatory and those which are facultative i.e. optional. Obligatory referen- dums relate to issues which must be submitted to a popular vote i.e. where no popular request is required. A facultative referendum only comes to a vote if a proportion of the voters (50,000) has demanded it. The referendum is a means whereby important state decisions are made subject to popular approval
+
+
 * In general, people's initatives are most often refused. 
 * 
 
+* [emocratic Infrastructures in the Service of Citizens’ Rights: the Swiss Experience](http://www.liechtenstein-institut.li/contortionist/0/contortionistUniverses/397/rsc/Publikation_downloadLink/LIAP_013.pdf)
+* [L’agriculture et la démocratie directe](http://arretsurinfo.ch/lagriculture-et-la-democratie-directe-33/)
 
 
 ```{r setup, include=FALSE}
+exploreData <- F
+
+keyw.sub <- c('Environmental_policy', 'Immigration_policy', 'Status_of_women', 
+              'Fundamental_rights', 'Pension_insurance', 'Indirect_taxation', 
+              'Intergovernmental_relations', 'Budget_cuts_and_remediation_measures',
+              'Children_and_young_people', 
+              "Arms", 'National_economic_supply', 'Crop_production', 
+              "Referendum", "Electoral_system", "Government__administration")
+
 
 data.file <- "data/VOTES_2017_05_30_clean.csv"
+vote.translation.file <- 'input/Swiss national ballots - themes - votes.csv'
+translation.file <- 'input/Swiss national ballots - themes - txt.csv'
+
 
 library(tidyverse)
 library(scales)
@@ -32,10 +68,8 @@ library(swiTheme)
 
 ### Interactive 
 library(htmltools)
-library(shiny)
 library(swiRcharts)
-library(ggiraph)
-require(viridis)
+library(highcharter)
 ```
 
 
@@ -44,8 +78,6 @@ data <- read_csv(data.file)
 
 # get the keywords weighting factor (how many "none")
 data$kw_multiplier <- apply(data, 1, function(ll) length(grep("none", ll[c("keyword1", "keyword2", "keyword3")])))
-keywords <- data %>% select(starts_with("keyword")) %>% unlist() %>% table() %>% sort(decreasing = T)
-keywords <- keywords[-which(names(keywords) == "none")]
 
 # make data long
 datal <- data %>% select(`Sl No`, keyword1, keyword2, keyword3) %>%
@@ -70,7 +102,23 @@ count <- dd %>% group_by(keyword, tbin) %>% summarise(nmax = length(voteID)) %>%
 # aggregate data by time bin
 ddd <- dd %>% arrange(date) %>% 
   group_by(keyword, tbin) %>% mutate(y = 1:length(voteID)) %>% 
-  ungroup()
+  ungroup() %>% mutate(keyword = gsub("( |,|\\-)", "_", keyword))
+
+
+keywords <- data %>% select(starts_with("keyword")) %>% unlist() %>% table() %>% sort(decreasing = T)
+keywords <- keywords[-which(names(keywords) == "none")]
+names(keywords) <- gsub("( |,|\\-)", "_", names(keywords))
+```
+```{r load translations}
+# load the vote translations
+vote.title <- read.csv(vote.translation.file, stringsAsFactors = F)
+vote.title %<>% select(-`Date.of.Votes`, -`Number.of.Vote`)
+rownames(vote.title) <- vote.title$X
+vote.title %<>% select(-X) %>% rename(EN = eng, DE = ger, FR = fre, IT = ita, ES = spa, PT = por, JA = jpn, ZH = chi, RU = rus, AR = ara)
+
+stopifnot(data$`Sl No` %in% row.names(vote.title))
+
+txt <- loadTranslation(translation.file)
 ```
 
 
@@ -78,67 +126,65 @@ ddd <- dd %>% arrange(date) %>%
 # viz subset top keywords
 kw.sub <- head(keywords, 40) %>% names()
 
-ggplot(data = ddd %>% filter(keyword %in% kw.sub), aes(x = tbin, y = y, fill = `yes_pc`)) + 
-  geom_tile(colour = "white", size = 0.5) + swi_theme(y_gridlines = F) + 
- # coord_fixed() +
-  scale_fill_gradient2(low = swi_col[8], high = swi_col[1], midpoint = 50) +
-  scale_x_discrete(name = "", labels = substr(levels(ddd$tbin), 1, 4), 
-                   drop = F) +
-  scale_y_continuous(name ="", breaks = NULL) + facet_wrap( ~ keyword)
+if(exploreData) {
+  ggplot(data = ddd %>% filter(keyword %in% kw.sub), aes(x = tbin, y = y, fill = `yes_pc`)) + 
+    geom_tile(colour = "white", size = 0.5) + swi_theme(y_gridlines = F) + 
+    scale_fill_gradient2(low = swi_col[8], high = swi_col[1], midpoint = 50) +
+    scale_x_discrete(name = "", labels = substr(levels(ddd$tbin), 1, 4), drop = F) +
+    scale_y_continuous(name ="", breaks = NULL) + facet_wrap( ~ keyword)  
+}
 
 ```
 
-```{r interactive small multiple}
-library(highcharter)
-
-# tmp for translation
-kws <- keywords %>% head(40)
-write.csv(data.frame(key = paste0(gsub("( |,|\\-)", "_", names(kws)), ".key"), EN = names(kws)), file = "data/tmp.csv", row.names = F)
-
-lang <- 'EN'
-#head(keywords, 30) %>% names()
-
-kw.sub
-ddd %>% filter(keyword %in% kw.sub) %>% 
-  summarise(max = max(yes_pc), min = min(yes_pc)) %>% ungroup()
-bg.colour <-  "white"
+```{r interactive small multiple - exploration & helpers}
+# chart settings
+bg.colour <-  "#f7f5ed" 
+chart.area.bg <- "white"
 chart.height <- 370
 
-# stops <- data.frame(q = c(0, 0.4999, 0.5, 1), 
-#                     c = c("#5d4622", '#e6dfd9', '#dbe1e1', "#224444"))
+# tmp for translation
+# kws <- keywords %>% head(40)
+# write.csv(data.frame(key = paste0(gsub("( |,|\\-)", "_", names(kws)), ".key"), EN = names(kws)), file = "data/tmp.csv", row.names = F)
 
+## HELPERS
+lang <- 'EN'
+
+ddd %>% filter(keyword %in% kw.sub) %>% 
+  summarise(max = max(yes_pc), min = min(yes_pc)) %>% ungroup()
 stops <- data.frame(q = c(0, 0.4999, 0.5, 1), 
                     c = c("#72302f", '#f8eded', '#dae9f1', "#193442"))
-
 cat.label <- levels(ddd$tbin)
-#cat.label[-c(1, round(length(cat.label) / 2), length(cat.label))] <- ""
 
 # add HTML break for name longer than 50 characters
-html_wrap <- function(x) {
-  gsub('(.{1,60})(\\s|$)', '\\1\\<br\\>', x)  
+html_wrap <- function(x, width = 60, linebreak = "<br>") {
+  paste0(strwrap(x, width=width), collapse = linebreak)
 }
 		
-
-
-singlePlot <- function(ddd, kw) {
+singlePlot <- function(ddd, kw, lang = 'EN') {
   dddd <- ddd %>% filter(keyword == kw)   
+  
+  # get translation
+  vtype <- dddd$type 
+  dddd$type <- case_when(
+     vtype == 'initiative' ~ txt['title.initiative', lang],
+     vtype == 'mandatory Referendum' ~ txt['title.mandatoryReferendum', lang],
+     vtype == 'facultative Referendum' ~ txt['title.facultativeReferendum', lang]
+  )
+  
+  dddd$title <- sapply(vote.title[match(dddd$voteID, rownames(vote.title)), lang], html_wrap)
   
   dddd$tp <- paste0(
     '<table class="table">',
     '<tr><td><b>', dddd$date, '</b></td>',
     '<td></td><td><b>', dddd$type, '</b></td></tr>',
-    '<tr><td colspan="3">', sapply(dddd$`Title in English`, html_wrap), '<hr></td></tr>',
-    '<tr><td>', "% yes", 
-    #trad["tp.yes",lang], 
+    '<tr><td colspan="3" style="text-align:center;font-size:larger">', dddd$title, '<hr></td></tr>',
+    '<tr><td>%', txt["tp.yes",lang], ": ", 
     ': <b>', round(dddd$yes_pc, 1), '%</b>', '</td><td></td>',
-    '<td>', "turnout",
-		#trad["tp.turnout",lang],  
-		": ",
-    ifelse(round(dddd$Turnout, 1) == 0, " ", paste0(round(dddd$Turnout, 1), "%")), '</td></tr>',
-		# ifelse(is.na(dddd$yes_nCanton), '', paste0('<tr><td colspan="3">', "Number of cantons having accepted it: ", dddd$yes_nCanton, "(out of ", as.numeric(dddd$yes_nCanton) + as.numeric(dddd$no_nCanton), ")")),
-		'<tr><td colspan="2"><div style="color:#999999">', "Outcome","</td><td>", 
-		ifelse(dddd$Result == "no", "rejected", "accepted"),
-		#trad["tp.refused",lang], trad["tp.accepted",lang]), 
+    '<td>', 
+    ifelse(round(dddd$Turnout, 1) == 0, "", paste0(txt["tp.turnout",lang], ": ", round(dddd$Turnout, 1), "%")), 
+    '</td></tr>',
+		'<tr><td colspan="2">', txt['tp.outcome', lang], "</td><td>", 
+		ifelse(dddd$Result == "no", txt["tp.refused",lang], txt["tp.accepted",lang]),
 		'</td></tr>','</table>')
 
   hc <- hchart(
@@ -154,12 +200,12 @@ singlePlot <- function(ddd, kw) {
     hc_add_theme(hc_theme_swi) %>%
     hc_chart(
       animation =F, backgroundColor = bg.colour, height = chart.height, 
-      spacing = list(3,15,12,15), borderRadius = 2,
-      borderColor = "#e6e6e6", borderWidth = 1
+      spacing = list(5,12,9,9), borderRadius = 2,
+      borderColor = "white", borderWidth = 3
     ) %>%
     hc_yAxis(
       gridLineWidth = 0, lineColor = 'transparent', min = 1, tickInterval = 1,
-      max = max(count$nmax), minPadding = 0, maxPadding = 0,
+      max = max(count$nmax), minPadding = 0, maxPadding = 0.02,
       labels = list (enabled = F), title = "", opposite = ifelse(lang == "AR", T, F)
     ) %>% 
     hc_xAxis(
@@ -171,94 +217,111 @@ singlePlot <- function(ddd, kw) {
   
   hc2 <- hc %>% 
     hc_add_series(
-      dddd %>% filter(type == 'initiative'), "scatter", 
+      dddd %>% filter(type == txt['title.initiative', lang]), "scatter", 
       hcaes(x = as.numeric(tbin)-1, y = y, group = as.factor(Result)), 
       marker = list(symbol = "diamond", radius = 3, lineWidth = 0) #, color = "#efe9e0"
     ) %>% hc_colors(colors = c("#ffffff", "#72302f"))
   
-  hc2 %>% hc_tooltip(
+  hc3 <- hc2 %>% hc_tooltip(
     hideDelay = 10, formatter = JS("function() { return this.point.tp; }"), 
-    useHTML = T, borderWidth = 2, 
-    backgroundColor = 'rgba(255,255,255,0.8)', style = list(padding = 3)
+    useHTML = T, borderWidth = 3, 
+    backgroundColor = 'rgba(255,255,255,1)', style = list(padding = 3)
   ) %>%
     hc_title(
-      floating = T, useHTML = T, text = kw, x = 0.5, y = 18,
+      floating = T, useHTML = T, text = txt[paste0(kw, ".key"), lang], x = 2, y = 19,
       style = list("fontSize" = "1.1em", "color" = '#0e1d25')
-    ) %>%
+    ) 
+  
+  hc3 %>%
     hc_subtitle(
-      floating = T, useHTML = T, text = "", x = 0.5, y = 40, widthAdjust = -120,
-      style = list("fontSize" = "0.95em", "color" = '#586a74')
+      floating = T, useHTML = T, text = txt[paste0(kw, ".sub"), lang], 
+      x = 2, y = 45, widthAdjust = -110,
+      style = list("fontSize" = "0.95em", "color" = '#586a74'  )
     )
 }
- 
-plots <- lapply(kw.sub, function(kw) singlePlot(ddd, kw))
-#hw_grid(plots, ncol = 4, rowheight = chart.height + 10)%>% browsable()
 
-save_html(
-   tags$html(
-    tags$head(includeHTML(style_swi_highcharter())),
-    div(class="graphic", hw_grid(plots, ncol = 3, rowheight = chart.height)),#,
-    #div(id = "cite", HTML(footer)),
-    HTML(iframeresizer)  
-  ), background = "#f2f2f2", 
-  file =  paste0("chVotes_byKeyword_", lang, ".html"), libdir = "js")
+if(exploreData) {
+  plots <- lapply(kw.sub, function(kw) singlePlot(ddd, kw))
 
+  source <- paste0(txt["source",lang], ": ", htmlLink("http://c2d.ch", txt["source.name",lang]), " | ", txt["code",lang], ": ",
+                   htmlLink("http://jkunst.com/highcharter/", txt["code.name",lang]), " | ",
+                   htmlLink("https://twitter.com/duc_qn", "@duc_qn"), " | swissinfo.ch")
+  
+  shapes.path <- list.files(system.file("extdata", package="swiRcharts"), pattern = "shapes\\.css", full.names = T)
+  		
+  save_html(
+    tags$html(
+      tags$head(includeHTML(style_swi_highcharter()), includeCSS(shapes.path)),
+      tags$h2(HTML(txt['main.title', lang])),
+      div(class = "descr", HTML(txt['descr', lang])),
+      div(class = "graphic", hw_grid(plots, ncol = 3, rowheight = chart.height)),
+      div(id = "cite", HTML(source)),
+     # div(class = "footer", HTML(txt['footer', lang])),
+      HTML(iframeresizer)  
+    ), background = chart.area.bg, 
+    file =  paste0("chVotes_byKeyword_exploration_", lang, ".html"), libdir = "js")
+  
+}
 
 ```
 
-```{r highcharter test, include = F}
-library(highcharter)
+```{r interactive small multiple - PRODUCTION}
+for(lang in colnames(txt)) {
+  cat("\n", lang)
+  
+  plots <- lapply(keyw.sub, function(kw) singlePlot(ddd, kw, lang = lang))
+  
+  source <- paste0(txt["source",lang], ": ", htmlLink("http://c2d.ch", txt["source.name",lang]), " | ", txt["code",lang], ": ",
+                   htmlLink("http://jkunst.com/highcharter/", txt["code.name",lang]), " | ",
+                   htmlLink("https://twitter.com/duc_qn", "@duc_qn"), " | swissinfo.ch")
+  
+  shapes.path <- list.files(system.file("extdata", package="swiRcharts"), pattern = "shapes\\.css", full.names = T)
+  
+  save_html(
+    tags$html(
+      tags$head(includeHTML(style_swi_highcharter()), includeCSS(shapes.path)),
+      tags$h2(HTML(txt['main.title', lang])),
+      div(class = "descr", HTML(txt['descr', lang])),
+      div(class = "graphic", hw_grid(plots, ncol = 3, rowheight = chart.height)),
+      div(id = "cite", HTML(source)),
+      # div(class = "footer", HTML(txt['footer', lang])),
+      HTML(iframeresizer)  
+    ), background = chart.area.bg, 
+    file =  paste0("chVotes_byKeyword_prod_", lang, ".html"), libdir = "js")
+}
 
-dddd <- ddd %>% filter(keyword == "Environmental policy") 
+```
 
-dddd$tp <- paste0(
-				'<table cellpadding="1" style="line-height:1.1">',
-			        '<tr><td>', dddd$date, '</td>',
-						'<td></td><td>', dddd$type, '</td></tr>',
-			       '<tr><td colspan="3"><i>', dddd$`Title in English`, '</i><hr></td></tr>',
-			       '<tr><td>', "% yes", 
-				#trad["tp.yes",lang], 
-				': <b>', round(dddd$yes_pc, 1), '%</b>', '</td><td></td>',
-				   		'<td>', "turnout",
-				#trad["tp.turnout",lang],  
-				": ",
-						ifelse(round(dddd$Turnout, 1) == 0, " ", paste0(round(dddd$Turnout, 1), "%")), '</td></tr>',
-					'<tr><td colspan="3" align="center"><div style="color:#999999">',
-						ifelse(dddd$Result == "no", "no", "yes"),
-						       #trad["tp.refused",lang], trad["tp.accepted",lang]), 
-						       '</td></tr>',
-				'</table></div>')
 
-bg.colour <-  "white"
-stops <- data.frame(q = c(0, 0.4999, 0.5, 1), 
-                    c = c("#72302f", '#f8eded', '#dae9f1', "#193442"))
+```{r word cloud}
+library(d3wordcloud)
 
-hc <- hchart(dddd, "heatmap", 
-             hcaes(x = tbin, y = y, value = yes_pc, tp = tp)) %>%
-  hc_colorAxis(min = 0, max  = 100, stops = list_parse2(stops)) %>%
-  hc_plotOptions(heatmap = list(borderWidth = 3, borderColor = bg.colour, 
-                                borderRadius = 4)) %>%
-  hc_legend(enabled = F) %>%
-  hc_yAxis(gridLineWidth = 0, lineColor = 'transparent', max = max(count$nmax),
-           labels = list (enabled = F), title = "", opposite = ifelse(lang == "AR", T, F)) %>%
-  hc_xAxis(gridLineWidth = 0, lineColor = 'transparent', title = "", tickLength = 0, 
-           min = 0, max = nlevels(dddd$tbin)-1, reversed = ifelse(lang == "AR", T, F)) %>%
-  hc_add_theme(hc_theme_swi)
+kwf <- data %>% select(starts_with("keyword")) %>% unlist() %>% table() %>% sort(decreasing = T)
+kwf <- kwf[-which(names(kwf) == "none")]
 
-hc2 <- hc %>% hc_add_series(dddd %>% filter(type == 'initiative'), "scatter", hcaes(x = as.numeric(tbin)-1, y = y), marker = list(symbol = "diamond", radius = 4, lineWidth = 1.5), color = "#efe9e0")
 
-# max width tooltip and wrap text https://stackoverflow.com/questions/21435021/highcharts-tooltip-html-max-width
-hc3 <- hc2 %>% hc_tooltip(
-  formatter = JS("function() { return this.point.tp; }"), useHTML = T,
-			borderWidth = 2, backgroundColor = 'rgba(255,255,255,0.8)', 
-  style = list(padding = 3)
-) %>%
-  hc_chart(backgroundColor = bg.colour)
+wc <- d3wordcloud(names(kwf), kwf, colors=sample(swi_col, length(kwf), T) , tooltip = T, 
+                  spiral = "rectangular", rotate.min = -30, rotate.max = 0, height=470,  font = "Open Sans")
 
-# hc4 <- hc3 %>% hc_add_annotation(
-#   xValue = -0.5, yValue = 13, 
-#   anchorX =  "left" , title = list(text = "Environmental policy", 
-#   style = list("color" =  "#beb298", "fontSize" = "3em"))
-# )
+wc$sizingPolicy$defaultWidth <- "100%"
 
+lang <- 'EN'
+  source <- paste0(
+    txt["source",lang], ": ", htmlLink("http://c2d.ch", txt["source.name",lang]), 
+    " | ", txt["code",lang], ": ", htmlLink("https://github.com/jbkunst/d3wordcloud", "d3wordcloud"), 
+    " | swissinfo.ch"
+  )            
+
+  save_html(
+    tags$html(
+      tags$head(includeHTML("styles.html")),
+      tags$body(    
+        h2(HTML("What are the most common themes in Switzerland's federal ballot?")),
+        # div(class = "descr", HTML("The most common words present in watch brands' press releases for Baselworld 2017. 137 press releases were analysed, only the words encountered more than 20 times are shown below. Words are sized according to their frequency. Hover over a term to see its count.")),
+        div(class="graphic", wc),
+        div(id = "cite", HTML(source)),
+        HTML(iframeresizer)
+      )), file = paste0("keyword_worldcloud_", lang, ".html"), libdir = "js")  
+  
+  
 ```
