@@ -40,9 +40,14 @@ data.read <- read_delim(data.file, delim = ",", locale = locale(encoding = "lati
   select(-Level, -Country)
 
 data <- data.read %>% 
-  select(-`Sl No`, -`Title in German`, -`Title in Italien`, -`Citizen Abroad`, 
+  select(-`Title in German`, -`Title in Italien`, -`Citizen Abroad`, 
          -`Empty Ballot Sheets`, -`Invalid Ballot Sheets`, -`Number of Signatures`,
          -`Number of Cantons attained (Referendum)`, -`Committee name`)
+
+# manual fix for some keywords
+data %>% filter(`Sl No` == 240) %>% select(`Theme codes`) %>% unlist(use.names = T) -> ori 
+data %<>% mutate(`Theme codes` = replace(`Theme codes`, `Sl No` == 240, gsub("Status of women", "none", ori)))
+
 
 ### hack for broken csv
 idx <- which(!grepl ("\\|", data$`Theme codes`))

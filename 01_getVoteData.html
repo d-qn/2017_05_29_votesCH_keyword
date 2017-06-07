@@ -443,9 +443,9 @@ as.vector(codes) %&gt;% table() %&gt;% sort()</code></pre>
 ##                                                                                         22 
 ##                                                                            Crop production 
 ##                                                                                         23 
-##                                                                               Criminal law 
-##                                                                                         25 
 ##                                                                            Status of women 
+##                                                                                         24 
+##                                                                               Criminal law 
 ##                                                                                         25 
 ##                                                                          Pension insurance 
 ##                                                                                         28 
@@ -462,7 +462,7 @@ as.vector(codes) %&gt;% table() %&gt;% sort()</code></pre>
 ##                                                                          Indirect taxation 
 ##                                                                                         44 
 ##                                                                                       none 
-##                                                                                        605</code></pre>
+##                                                                                        606</code></pre>
 <pre class="r"><code>data &lt;- cbind(data, codes, stringsAsFactors = F) %&gt;% select(-Comments) </code></pre>
 <pre class="r"><code># Create new column with vote type (3 types)
 ### the different vote types
