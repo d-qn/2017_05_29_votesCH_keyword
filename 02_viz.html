@@ -125,19 +125,33 @@ $(document).ready(function () {
 
 <div id="TOC">
 <ul>
+<li><a href="#todo">ToDo</a></li>
 <li><a href="#translation">Translation</a></li>
 <li><a href="#txt">Txt</a></li>
+<li><a href="#snippets">Snippets</a></li>
 </ul>
 </div>
 
+<div id="todo" class="section level2">
+<h2>ToDo</h2>
+<p>However themes do not tell whether increase or decrease</p>
+</div>
 <div id="translation" class="section level2">
 <h2>Translation</h2>
-<p>vote names are matched according to their “Sl No”</p>
+<p>*<strong>CHECK</strong> <strong>vote names are matched according to their “Sl No”</strong></p>
 </div>
 <div id="txt" class="section level2">
 <h2>Txt</h2>
-<p>Swiss are the world champion of direct democracy</p>
+<p>Environement, foreigners, woman status</p>
+<p><em>Since 1848, Swiss had their say over 600 nationwide ballots. Are there themes which have been recently more popular? Here is visual summary spanning over 170 years of Swiss polls </em></p>
+<p>Nearly half of the states in the world have some form of direct legislation. But Switzerland stands alone in how extensively it uses it. In most part of the world, referendums and initiatives remain rare. But Swiss go to polls about four times a year for national votes. But to give their say on what kind of topic? swissinfo.ch looked at all the ballots’ themes since Switzerland’s first constitution in 1848.</p>
+<p>We used the data compiled by the Centre for Research on Direct Democracy which tagged to all nationwide ballots in Switzerland (over 600) themes. Each ballot got assigned between 1 to 3 theme. Here is under</p>
+</div>
+<div id="snippets" class="section level2">
+<h2>Snippets</h2>
 <p>Switzerland‟s first constitution of 1848 followed the principle of representation. It contained only two direct-democratic rights: the mandatory constitutional referendum and the popular ini- tiative for a complete revision of the federal constitution. The other popular rights were introduced gradually in a process which took many years. We have to consider them as concessions which the political elite had to make to opposition forces.</p>
+<p>De 1848 à 1875, il n’y a eu que des « référendums obligatoires » prévus par la constitution sur les sujets les plus importants définies par celle-ci. Pour qu’un texte voté par le parlement soit adopté sur certains sujets, il faut une majorité simple des citoyens plus une majorité des cantons (25 cantons jusqu’en 1978 ; 26 depuis la création du canton du Jura).</p>
+<p>En 1875, fut introduit le « référendum facultatif ». Par une pétition de 50 000 signatures contre une loi votée par le parlement, des citoyens peuvent déclencher un référendum contre cette loi. La majorité simple des votants décide si la loi est adoptée ou rejetée par le peuple. Ce dispositif donne au peuple un droit de veto contre les textes votés par le parlement. C’est un « frein » contre les modifications de la loi non souhaitées par le peuple.</p>
 <p>basic distinction is made between popular initiatives and ref- erendums.</p>
 <p>The referendum, on the other hand, allows parliamentary decisions which have already been taken to be struck down or modified.8 Referendums can be subdivided into those which are obligatory and those which are facultative i.e. optional. Obligatory referen- dums relate to issues which must be submitted to a popular vote i.e. where no popular request is required. A facultative referendum only comes to a vote if a proportion of the voters (50,000) has demanded it. The referendum is a means whereby important state decisions are made subject to popular approval</p>
 <ul>
@@ -145,6 +159,8 @@ $(document).ready(function () {
 <li></li>
 <li><a href="http://www.liechtenstein-institut.li/contortionist/0/contortionistUniverses/397/rsc/Publikation_downloadLink/LIAP_013.pdf">emocratic Infrastructures in the Service of Citizens’ Rights: the Swiss Experience</a></li>
 <li><a href="http://arretsurinfo.ch/lagriculture-et-la-democratie-directe-33/">L’agriculture et la démocratie directe</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Voting_in_Switzerland">wikipedia Voting in Switzerland</a></li>
+<li><a href="http://www.democratiedirecte.fr/2009/12/principaux-referendums-en-suisse-depuis-1948-au-niveau-national-federal/">Principaux référendums en Suisse depuis 1948 au niveau national (fédéral)</a></li>
 </ul>
 <pre class="r"><code>data &lt;- read_csv(data.file)</code></pre>
 <pre><code>## Parsed with column specification:
@@ -224,7 +240,7 @@ if(exploreData) {
 <pre class="r"><code># chart settings
 bg.colour &lt;-  &quot;#f7f5ed&quot; 
 chart.area.bg &lt;- &quot;white&quot;
-chart.height &lt;- 370
+chart.height &lt;- 340
 
 # tmp for translation
 # kws &lt;- keywords %&gt;% head(40)
@@ -244,12 +260,16 @@ ddd %&gt;% filter(keyword %in% kw.sub) %&gt;%
 cat.label &lt;- levels(ddd$tbin)
 
 # add HTML break for name longer than 50 characters
-html_wrap &lt;- function(x, width = 60, linebreak = &quot;&lt;br&gt;&quot;) {
+html_wrap &lt;- function(x, width = 55, linebreak = &quot;&lt;br&gt;&quot;) {
   paste0(strwrap(x, width=width), collapse = linebreak)
 }
         
 singlePlot &lt;- function(ddd, kw, lang = 'EN') {
   dddd &lt;- ddd %&gt;% filter(keyword == kw)   
+  
+  max.x &lt;- nlevels(dddd$tbin)-1
+  max.y &lt;- dddd %&gt;% group_by(tbin) %&gt;% summarise(max.y = max(y)) %&gt;% 
+    ungroup() 
   
   # get translation
   vtype &lt;- dddd$type 
@@ -258,7 +278,6 @@ singlePlot &lt;- function(ddd, kw, lang = 'EN') {
      vtype == 'mandatory Referendum' ~ txt['title.mandatoryReferendum', lang],
      vtype == 'facultative Referendum' ~ txt['title.facultativeReferendum', lang]
   )
-  
   dddd$title &lt;- sapply(vote.title[match(dddd$voteID, rownames(vote.title)), lang], html_wrap)
   
   dddd$tp &lt;- paste0(
@@ -272,7 +291,7 @@ singlePlot &lt;- function(ddd, kw, lang = 'EN') {
     ifelse(round(dddd$Turnout, 1) == 0, &quot;&quot;, paste0(txt[&quot;tp.turnout&quot;,lang], &quot;: &quot;, round(dddd$Turnout, 1), &quot;%&quot;)), 
     '&lt;/td&gt;&lt;/tr&gt;',
         '&lt;tr&gt;&lt;td colspan=&quot;2&quot;&gt;', txt['tp.outcome', lang], &quot;&lt;/td&gt;&lt;td&gt;&quot;, 
-        ifelse(dddd$Result == &quot;no&quot;, txt[&quot;tp.refused&quot;,lang], txt[&quot;tp.accepted&quot;,lang]),
+        ifelse(dddd$Result == &quot;no&quot;, txt[&quot;tp.refused&quot;,lang], paste0(&quot;&lt;b&gt;&quot;, txt[&quot;tp.accepted&quot;,lang], &quot;&lt;/b&gt;&quot;)),
         '&lt;/td&gt;&lt;/tr&gt;','&lt;/table&gt;')
 
   hc &lt;- hchart(
@@ -282,7 +301,8 @@ singlePlot &lt;- function(ddd, kw, lang = 'EN') {
       min = 0, max  = 100, stops = list_parse2(stops)
     ) %&gt;%
     hc_plotOptions(
-      heatmap = list(borderWidth = 3, borderColor = bg.colour, borderRadius = 2)
+      heatmap = list(borderWidth = 3, borderColor = bg.colour, borderRadius = 2,
+                     states = list(hover = list(color = &quot;black&quot;)))
     ) %&gt;%
   hc_legend(enabled = F) %&gt;%
     hc_add_theme(hc_theme_swi) %&gt;%
@@ -300,7 +320,7 @@ singlePlot &lt;- function(ddd, kw, lang = 'EN') {
       label = list(autoRotation = list(0), padding = 1, step = 2), 
       categories = as.list(cat.label), 
       gridLineWidth = 0,  title = &quot;&quot;, tickLength = 4,
-      min = 0, max = nlevels(dddd$tbin)-1, reversed = ifelse(lang == &quot;AR&quot;, T, F)
+      min = 0, max = max.x, reversed = ifelse(lang == &quot;AR&quot;, T, F)
     ) 
   
   hc2 &lt;- hc %&gt;% 
@@ -312,20 +332,22 @@ singlePlot &lt;- function(ddd, kw, lang = 'EN') {
   
   hc3 &lt;- hc2 %&gt;% hc_tooltip(
     hideDelay = 10, formatter = JS(&quot;function() { return this.point.tp; }&quot;), 
-    useHTML = T, borderWidth = 3, 
-    backgroundColor = 'rgba(255,255,255,1)', style = list(padding = 3)
+    useHTML = T, borderWidth = 1, 
+    backgroundColor = 'rgba(255,255,255,1)', style = list(padding = 3, fontSize = &quot;0.7em&quot;)
   ) %&gt;%
     hc_title(
       floating = T, useHTML = T, text = txt[paste0(kw, &quot;.key&quot;), lang], x = 2, y = 19,
-      style = list(&quot;fontSize&quot; = &quot;1.1em&quot;, &quot;color&quot; = '#0e1d25')
+      style = list(&quot;fontSize&quot; = &quot;1.05em&quot;, &quot;color&quot; = '#505c62')
     ) 
   
-  hc3 %&gt;%
-    hc_subtitle(
-      floating = T, useHTML = T, text = txt[paste0(kw, &quot;.sub&quot;), lang], 
-      x = 2, y = 45, widthAdjust = -110,
-      style = list(&quot;fontSize&quot; = &quot;0.95em&quot;, &quot;color&quot; = '#586a74'  )
-    )
+  if(!is.na(txt[paste0(kw, &quot;.sub&quot;), lang])) {
+    hc3 &lt;- hc3 %&gt;% hc_subtitle(
+      floating = T, useHTML = ifelse(lang == &quot;AR&quot;, T, F), text = txt[paste0(kw, &quot;.sub&quot;), lang], 
+      x = 2, y = 45, widthAdjust = ifelse(max(max.y$max.y) &lt; 9, -2, -100 * (1-which.max(max.y$max.y) /  max.x)), 
+      style = list(&quot;fontSize&quot; = ifelse(lang == &quot;AR&quot;, &quot;0.95em&quot;, &quot;1.1em&quot;), &quot;color&quot; = &quot;#1a1a1a&quot;)
+    )  
+  } 
+  hc3
 }
 
 if(exploreData) {
@@ -365,7 +387,7 @@ if(exploreData) {
     tags$html(
       tags$head(includeHTML(style_swi_highcharter()), includeCSS(shapes.path)),
       tags$h2(HTML(txt['main.title', lang])),
-      div(class = &quot;descr&quot;, HTML(txt['descr', lang])),
+      div(class = &quot;descr&quot;, HTML(paste0('&lt;img src=&quot;https://interactive.swissinfo.ch/assets/Interactive_icon.svg.png&quot; width=&quot;15&quot; align=&quot;top&quot;&gt;&amp;nbsp; ', txt['descr', lang]))),
       div(class = &quot;graphic&quot;, hw_grid(plots, ncol = 3, rowheight = chart.height)),
       div(id = &quot;cite&quot;, HTML(source)),
       # div(class = &quot;footer&quot;, HTML(txt['footer', lang])),
@@ -381,7 +403,7 @@ kwf &lt;- data %&gt;% select(starts_with(&quot;keyword&quot;)) %&gt;% unlist() %
 kwf &lt;- kwf[-which(names(kwf) == &quot;none&quot;)]
 
 
-wc &lt;- d3wordcloud(names(kwf), kwf, colors=sample(swi_col, length(kwf), T) , tooltip = T, 
+wc &lt;- d3wordcloud(names(kwf), kwf, colors=sample(swi_col[-c(1, length(swi_col))], length(kwf), T) , tooltip = T, padding = 1,
                   spiral = &quot;rectangular&quot;, rotate.min = -30, rotate.max = 0, height=470,  font = &quot;Open Sans&quot;)
 
 wc$sizingPolicy$defaultWidth &lt;- &quot;100%&quot;
@@ -397,12 +419,12 @@ lang &lt;- 'EN'
     tags$html(
       tags$head(includeHTML(&quot;styles.html&quot;)),
       tags$body(    
-        h2(HTML(&quot;What are the most common themes in Switzerland's federal ballot?&quot;)),
-        # div(class = &quot;descr&quot;, HTML(&quot;The most common words present in watch brands' press releases for Baselworld 2017. 137 press releases were analysed, only the words encountered more than 20 times are shown below. Words are sized according to their frequency. Hover over a term to see its count.&quot;)),
+        h2(HTML(txt['main.title2', lang])),
+        div(class = &quot;descr&quot;, HTML(txt['descr2', lang])),
         div(class=&quot;graphic&quot;, wc),
         div(id = &quot;cite&quot;, HTML(source)),
         HTML(iframeresizer)
-      )), file = paste0(&quot;keyword_worldcloud_&quot;, lang, &quot;.html&quot;), libdir = &quot;js&quot;)  </code></pre>
+      )), file = paste0(&quot;keyword_worldcloud_&quot;, lang, &quot;.html&quot;), libdir = &quot;js&quot;, background = &quot;#060d13&quot;)  </code></pre>
 </div>
 
 

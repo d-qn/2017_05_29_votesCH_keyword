@@ -44,9 +44,11 @@ data <- data.read %>%
          -`Empty Ballot Sheets`, -`Invalid Ballot Sheets`, -`Number of Signatures`,
          -`Number of Cantons attained (Referendum)`, -`Committee name`)
 
-# manual fix for some keywords
+### manual fix for some keywords ###
+# Citizen's initiative \"Save our lakes and  rivers\" -> not Criminal_law nor Children_and_young_people !!
 data %>% filter(`Sl No` == 240) %>% select(`Theme codes`) %>% unlist(use.names = T) -> ori 
-data %<>% mutate(`Theme codes` = replace(`Theme codes`, `Sl No` == 240, gsub("Status of women", "none", ori)))
+data %<>% mutate(`Theme codes` = replace(`Theme codes`, `Sl No` == 240, "Environmental policy | Protection of nature and cultural heritage | none"))
+
 
 
 ### hack for broken csv
