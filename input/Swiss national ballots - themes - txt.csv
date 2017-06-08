@@ -1,7 +1,8 @@
 code,EN,FR,DE,IT,PT,AR,RU,ES,JA,ZH
-main.title,What are the themes Swiss voted on over time?,,,,,,,,,
-descr,"National ballots in Switzerland for selected themes and by 10 years brackets. Each ballot is represented by a <div id=""rectangle""></div> coloured according to the percentage of yes vote, ballots with a majority of ""no"" have different shades of <span style=""color:#72302f; font-weight:bold;"">red</span>. People's initiatives are marked with a  <div id=""diamond"" style=""background:
-#efe9e0""></div> (<div id=""diamond"" style=""background:#72302f""></div> for rejected initiatives). Each ballot was assigned between 1 to 3 keyword theme.",,,,,,,,,
+main.title,More afraid about the environement or the foreigners? ,,,,,,,,,
+descr,"National ballots in Switzerland for selected themes and by 10 years brackets. Each ballot is represented by a <div id=""rectangle""></div> shaded according to the percentage of yes vote, ballots with a majority of ""no"" have different shades of <span style=""color:#72302f; font-weight:bold;"">red</span>. People's initiatives are marked with a  <div id=""diamond"" style=""background:
+#efe9e0""></div> (for rejected initiatives <div id=""diamond"" style=""background:#72302f""></div>).",,,,,,,,,
+h3,What are the themes Swiss voted on over time?,,,,,,,,,
 tp.yes,Yes,Ja,Oui,Sì,Sí,Sim,賛成,赞成,Да,نعم
 tp.turnout,Turnout,Stimmbeteiligung,Participation,Partecipazione,Participación,Participação,投票率,参与率,Участие,نسبة المشاركة
 tp.accepted,Accepted,angenommen,accepté,accettato,aceptado,aprovado,可決,通过,Одобрено,تمت الموافقة عليه
@@ -41,4 +42,4 @@ Referendum.sub,"Swiss like so much polls, they regularly voted on how to modifiy
 Electoral_system.key,Electoral system,,,,,,,,,
 Government__administration.key,"Government, administration",,,,,,,,,
 main.title2,What are the most common themes in Switzerland's federal ballot?,,,,,,,,,
-descr2,Keyword themes assigned to all federal ballots in Switzerland since 1848. Words' sizes are scaled according to their frequency. Mouse over a term to see its exact frequency.,,,,,,,,,
+descr2,Keyword themes assigned to all federal ballots in Switzerland since 1848. Words' sizes are scaled according to their frequency. Hover over a term to see its count.,,,,,,,,,

@@ -10,7 +10,7 @@ output:
 ---
 ## ToDo
 
-However themes do not tell whether increase or decrease 
+* Some subjectivity in defining ballot theme
 
 
 ## Translation
@@ -33,11 +33,9 @@ We used for that data compiled by the Centre for Research on Direct Democracy wh
 
 GRAPHIC
 
-However, such theme wordcloud do not tell us anything about the ballots' outcome nor how these themes evolved over time. 
+However, such theme wordcloud do not tell us anything about the ballots' outcome nor how these themes evolved over time. A more complete view is offered under, showing the detailed ballots over time by theme. If you are not familiar with direct democracy, please note that there are three different types of votes represented in this graphic:
 
-A more complete view is offered under, showing the detailed ballots over time by theme. Please note that there are three different types of votes represented in this graphic:
-
-* Mandatory referendums (since 1848): In the case of a change, however small, to the constitution by parliament, the people must have their say. The same goes for membership in collective security organisations or supranational communities, and in the adoption of laws that have been declared urgent.
+* Mandatory referendums (since 1848): In the case of a change, however small, to the constitution by parliament, the people must have their say. The same goes for membership in supranational communities or in the adoption of laws that have been declared urgent.
 * Optional referendums: (since 1875): Swiss citizens can also contest all laws adopted or modified by parliament. For an “optional referendum” vote to take place, at least 50,000 signatures from citizens must be filed.
 * People's initiatives: (since 1893): People’s initiatives allow citizens to propose changes to the constitution by introducing new provisions, or by amending or repealing existing provisions. For an initiative to be submitted for a verdict at the polls, its proponents must gather at least 100,000 signatures from citizens eligible to vote.
 
@@ -48,6 +46,7 @@ In general, people's initatives are much more often refused than referendums. Ab
 
 GRAPHIC 
 
+There is of course some subjectivity in defining what are the topics for every ballot. However based on the data at hand, we can observe rise of people's initiatives regarding the environement, immigration and the status of woman.  
 
 
 ## Snippets
@@ -331,6 +330,7 @@ for(lang in colnames(txt)) {
       tags$head(includeHTML(style_swi_highcharter()), includeCSS(shapes.path)),
       tags$h2(HTML(txt['main.title', lang])),
       div(class = "descr", HTML(paste0('<img src="https://interactive.swissinfo.ch/assets/Interactive_icon.svg.png" width="15" align="top">&nbsp; ', txt['descr', lang]))),
+      tags$h3(HTML(txt['h3', lang])),
       div(class = "graphic", hw_grid(plots, ncol = 3, rowheight = chart.height)),
       div(id = "cite", HTML(source)),
       # div(class = "footer", HTML(txt['footer', lang])),
@@ -349,7 +349,7 @@ kwf <- data %>% select(starts_with("keyword")) %>% unlist() %>% table() %>% sort
 kwf <- kwf[-which(names(kwf) == "none")]
 
 
-wc <- d3wordcloud(names(kwf), kwf, colors=sample(swi_col[-c(1, length(swi_col))], length(kwf), T) , tooltip = T, padding = 1,
+wc <- d3wordcloud(names(kwf), kwf, colors = sample(c(swi_col[-c(1, length(swi_col))], swi_pal[1:16]), length(kwf), T) , tooltip = T, padding = 1,
                   spiral = "rectangular", rotate.min = -30, rotate.max = 0, height=470,  font = "Open Sans")
 
 wc$sizingPolicy$defaultWidth <- "100%"
