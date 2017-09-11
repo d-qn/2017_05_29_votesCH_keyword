@@ -1,8 +1,7 @@
 code,EN,FR,DE,IT,PT,AR,RU,ES,JA,ZH
-main.title,More afraid about the environement or the foreigners? ,,,,,,,,,
+main.title,What is Switzerland's direct democracy about?,,,,,,,,,
 descr,"National ballots in Switzerland for selected themes and by 10 years brackets. Each ballot is represented by a <div id=""rectangle""></div> shaded according to the percentage of yes vote, ballots with a majority of ""no"" have different shades of <span style=""color:#72302f; font-weight:bold;"">red</span>. People's initiatives are marked with a  <div id=""diamond"" style=""background:
 #efe9e0""></div> (for rejected initiatives <div id=""diamond"" style=""background:#72302f""></div>).",,,,,,,,,
-h3,What are the themes Swiss voted on over time?,,,,,,,,,
 tp.yes,Yes,Ja,Oui,Sì,Sí,Sim,賛成,赞成,Да,نعم
 tp.turnout,Turnout,Stimmbeteiligung,Participation,Partecipazione,Participación,Participação,投票率,参与率,Участие,نسبة المشاركة
 tp.accepted,Accepted,angenommen,accepté,accettato,aceptado,aprovado,可決,通过,Одобрено,تمت الموافقة عليه

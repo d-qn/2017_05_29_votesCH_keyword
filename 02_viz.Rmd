@@ -26,7 +26,6 @@ output:
 
 *Since 1848, Swiss had their say over 600 nationwide ballots. Are there themes that have recently beenmore popular? Here is visual summary spanning over 170 years of Swiss polls*
 
-
 Nearly half of the states in the world have some form of direct legislation. But Switzerland stands alone in how extensively it uses it. Swiss go to polls about four times a year for national votes. But to give their say on what topic? swissinfo.ch looked at allballots' themes since Switzerland's first constitution in 1848.
 
 We used for that data compiled by the Centre for Research on Direct Democracy which tagged all nationwide ballots in Switzerland (over 600) with keyword themes. Each ballot got assigned between 1 to 3 theme. Here is under a graphic showing the frequency of all themes: 
@@ -42,7 +41,6 @@ However, such theme wordcloud do not tell us anything about the ballots' outcome
 In general, people's initatives are much more often refused than referendums. About 90% of all People's initiatives have been rejected by Swiss citizens, while over 70% of mandatory Referendums have been accepted.
 
 (illustrated here) https://www.swissinfo.ch/directdemocracy/explore-600-national-votes_how-direct-democracy-has-grown-over-the-decades/41481992) 
-
 
 GRAPHIC 
 
@@ -250,7 +248,7 @@ singlePlot <- function(ddd, kw, lang = 'EN') {
     ) %>%
     hc_yAxis(
       gridLineWidth = 0, lineColor = 'transparent', min = 1, tickInterval = 1,
-      max = max(count$nmax), minPadding = 0, maxPadding = 0.02,
+      max = max(count$nmax), minPadding = 0, maxPadding = 0.02, 
       labels = list (enabled = F), title = "", opposite = ifelse(lang == "AR", T, F)
     ) %>% 
     hc_xAxis(
@@ -329,8 +327,8 @@ for(lang in colnames(txt)) {
     tags$html(
       tags$head(includeHTML(style_swi_highcharter()), includeCSS(shapes.path)),
       tags$h2(HTML(txt['main.title', lang])),
-      div(class = "descr", HTML(paste0('<img src="https://interactive.swissinfo.ch/assets/Interactive_icon.svg.png" width="15" align="top">&nbsp; ', txt['descr', lang]))),
-      tags$h3(HTML(txt['h3', lang])),
+      div(class = "descr", HTML(paste0('<img src="https://interactive.swissinfo.ch/assets/Interactive_icon.svg.png" width="12" align="top">&nbsp; ', txt['descr', lang]))),
+      #tags$h3(HTML(txt['h3', lang])),
       div(class = "graphic", hw_grid(plots, ncol = 3, rowheight = chart.height)),
       div(id = "cite", HTML(source)),
       # div(class = "footer", HTML(txt['footer', lang])),
@@ -346,11 +344,16 @@ for(lang in colnames(txt)) {
 library(d3wordcloud)
 
 kwf <- data %>% select(starts_with("keyword")) %>% unlist() %>% table() %>% sort(decreasing = T)
-kwf <- kwf[-which(names(kwf) == "none")]
+kwf <- kwf[-which(names(kwf) == "none" | kwf <= 7)]
 
 
-wc <- d3wordcloud(names(kwf), kwf, colors = sample(c(swi_col[-c(1, length(swi_col))], swi_pal[1:16]), length(kwf), T) , tooltip = T, padding = 1,
-                  spiral = "rectangular", rotate.min = -30, rotate.max = 0, height=470,  font = "Open Sans")
+wc <- d3wordcloud(names(kwf), kwf, 
+                  colors = sample(c(swi_col[-c(1, length(swi_col))], swi_pal[1:16]), length(kwf), T) , 
+                  tooltip = T, padding = 2,
+                  spiral = "rectangular", 
+                  rotate.min = -30, rotate.max = -30, 
+                  rangesizefont = c(10, 40),
+                  height=500,  font = "Open Sans")
 
 wc$sizingPolicy$defaultWidth <- "100%"
 

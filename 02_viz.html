@@ -351,7 +351,7 @@ singlePlot &lt;- function(ddd, kw, lang = 'EN') {
     ) %&gt;%
     hc_yAxis(
       gridLineWidth = 0, lineColor = 'transparent', min = 1, tickInterval = 1,
-      max = max(count$nmax), minPadding = 0, maxPadding = 0.02,
+      max = max(count$nmax), minPadding = 0, maxPadding = 0.02, format = '{y}%',
       labels = list (enabled = F), title = &quot;&quot;, opposite = ifelse(lang == &quot;AR&quot;, T, F)
     ) %&gt;% 
     hc_xAxis(
@@ -425,8 +425,8 @@ if(exploreData) {
     tags$html(
       tags$head(includeHTML(style_swi_highcharter()), includeCSS(shapes.path)),
       tags$h2(HTML(txt['main.title', lang])),
-      div(class = &quot;descr&quot;, HTML(paste0('&lt;img src=&quot;https://interactive.swissinfo.ch/assets/Interactive_icon.svg.png&quot; width=&quot;15&quot; align=&quot;top&quot;&gt;&amp;nbsp; ', txt['descr', lang]))),
-      tags$h3(HTML(txt['h3', lang])),
+      div(class = &quot;descr&quot;, HTML(paste0('&lt;img src=&quot;https://interactive.swissinfo.ch/assets/Interactive_icon.svg.png&quot; width=&quot;12&quot; align=&quot;top&quot;&gt;&amp;nbsp; ', txt['descr', lang]))),
+      #tags$h3(HTML(txt['h3', lang])),
       div(class = &quot;graphic&quot;, hw_grid(plots, ncol = 3, rowheight = chart.height)),
       div(id = &quot;cite&quot;, HTML(source)),
       # div(class = &quot;footer&quot;, HTML(txt['footer', lang])),
@@ -439,11 +439,16 @@ if(exploreData) {
 <pre class="r"><code>library(d3wordcloud)
 
 kwf &lt;- data %&gt;% select(starts_with(&quot;keyword&quot;)) %&gt;% unlist() %&gt;% table() %&gt;% sort(decreasing = T)
-kwf &lt;- kwf[-which(names(kwf) == &quot;none&quot;)]
+kwf &lt;- kwf[-which(names(kwf) == &quot;none&quot; | kwf &lt;= 7)]
 
 
-wc &lt;- d3wordcloud(names(kwf), kwf, colors = sample(c(swi_col[-c(1, length(swi_col))], swi_pal[1:16]), length(kwf), T) , tooltip = T, padding = 1,
-                  spiral = &quot;rectangular&quot;, rotate.min = -30, rotate.max = 0, height=470,  font = &quot;Open Sans&quot;)
+wc &lt;- d3wordcloud(names(kwf), kwf, 
+                  colors = sample(c(swi_col[-c(1, length(swi_col))], swi_pal[1:16]), length(kwf), T) , 
+                  tooltip = T, padding = 2,
+                  spiral = &quot;rectangular&quot;, 
+                  rotate.min = -30, rotate.max = -30, 
+                  rangesizefont = c(10, 40),
+                  height=500,  font = &quot;Open Sans&quot;)
 
 wc$sizingPolicy$defaultWidth &lt;- &quot;100%&quot;
 
