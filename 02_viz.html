@@ -294,7 +294,7 @@ ddd %&gt;% filter(keyword %in% kw.sub) %&gt;%
 ##   &lt;dbl&gt; &lt;dbl&gt;
 ## 1 94.27  2.68</code></pre>
 <pre class="r"><code>stops &lt;- data.frame(q = c(0, 0.4999, 0.5, 1), 
-                    c = c(&quot;#72302f&quot;, '#f8eded', '#dae9f1', &quot;#193442&quot;))
+                    c = c(&quot;#481e1e&quot;, '#f1dada', '#c8deea', &quot;#152c37&quot;))
 cat.label &lt;- levels(ddd$tbin)
 
 # add HTML break for name longer than 50 characters
@@ -345,13 +345,13 @@ singlePlot &lt;- function(ddd, kw, lang = 'EN') {
   hc_legend(enabled = F) %&gt;%
     hc_add_theme(hc_theme_swi) %&gt;%
     hc_chart(
-      animation =F, backgroundColor = bg.colour, height = chart.height, 
+      animation = F, backgroundColor = bg.colour, height = chart.height, 
       spacing = list(5,12,9,9), borderRadius = 2,
       borderColor = &quot;white&quot;, borderWidth = 3
     ) %&gt;%
     hc_yAxis(
       gridLineWidth = 0, lineColor = 'transparent', min = 1, tickInterval = 1,
-      max = max(count$nmax), minPadding = 0, maxPadding = 0.02, format = '{y}%',
+      max = max(count$nmax), minPadding = 0, maxPadding = 0.02, 
       labels = list (enabled = F), title = &quot;&quot;, opposite = ifelse(lang == &quot;AR&quot;, T, F)
     ) %&gt;% 
     hc_xAxis(
@@ -375,14 +375,14 @@ singlePlot &lt;- function(ddd, kw, lang = 'EN') {
   ) %&gt;%
     hc_title(
       floating = T, useHTML = T, text = txt[paste0(kw, &quot;.key&quot;), lang], x = 2, y = 19,
-      style = list(&quot;fontSize&quot; = &quot;1.05em&quot;, &quot;color&quot; = '#505c62')
+      style = list(&quot;fontSize&quot; = &quot;1.05em&quot;, &quot;color&quot; = '#454f54')
     ) 
   
   if(!is.na(txt[paste0(kw, &quot;.sub&quot;), lang])) {
     hc3 &lt;- hc3 %&gt;% hc_subtitle(
       floating = T, useHTML = ifelse(lang == &quot;AR&quot;, T, F), text = txt[paste0(kw, &quot;.sub&quot;), lang], 
       x = 2, y = 45, widthAdjust = ifelse(max(max.y$max.y) &lt; 9, -2, -100 * (1-which.max(max.y$max.y) /  max.x)), 
-      style = list(&quot;fontSize&quot; = ifelse(lang == &quot;AR&quot;, &quot;0.95em&quot;, &quot;1.1em&quot;), &quot;color&quot; = &quot;#1a1a1a&quot;)
+      style = list(&quot;fontSize&quot; = ifelse(lang == &quot;AR&quot;, &quot;0.95em&quot;, &quot;1.1em&quot;), &quot;color&quot; = &quot;#0d0d0d&quot;)
     )  
   } 
   hc3
@@ -439,16 +439,18 @@ if(exploreData) {
 <pre class="r"><code>library(d3wordcloud)
 
 kwf &lt;- data %&gt;% select(starts_with(&quot;keyword&quot;)) %&gt;% unlist() %&gt;% table() %&gt;% sort(decreasing = T)
-kwf &lt;- kwf[-which(names(kwf) == &quot;none&quot; | kwf &lt;= 7)]
-
-
-wc &lt;- d3wordcloud(names(kwf), kwf, 
-                  colors = sample(c(swi_col[-c(1, length(swi_col))], swi_pal[1:16]), length(kwf), T) , 
-                  tooltip = T, padding = 2,
+kwf &lt;- kwf[-which(names(kwf) == &quot;none&quot; )]
+kwf &lt;- kwf[which(kwf &gt;= kwf[wordcloud_topN] )]
+length(kwf)</code></pre>
+<pre><code>## [1] 50</code></pre>
+<pre class="r"><code>wc &lt;- d3wordcloud(names(kwf), kwf, 
+                  colors = rev(colorRampPalette(c(swi_col[c(2,7,3,6,4,5)], '#f7f5ed'))(length(kwf))),
+                  #colors = sample(c(swi_col[-c(1, length(swi_col))]), length(kwf), T) , 
+                  tooltip = T, padding = 1,
                   spiral = &quot;rectangular&quot;, 
                   rotate.min = -30, rotate.max = -30, 
-                  rangesizefont = c(10, 40),
-                  height=500,  font = &quot;Open Sans&quot;)
+                  rangesizefont = c(10, 35),
+                  height = 530,  font = &quot;Open Sans&quot;)
 
 wc$sizingPolicy$defaultWidth &lt;- &quot;100%&quot;
 
