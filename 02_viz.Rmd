@@ -1,5 +1,5 @@
 ---
-title: "viz"
+title: "viz ballot themes"
 author: "Duc-Quang Nguyen | swissinfo.ch"
 date: " 2017"
 output: 
@@ -12,6 +12,9 @@ output:
 
 * Some subjectivity in defining ballot theme
 
+# old
+Each ballot is represented by a <div id="rectangle"></div> shaded according to the percentage of yes vote, ballots with a majority of "no" have different shades of <span style="color:#72302f; font-weight:bold;">red</span>. People's initiatives are marked with a  <div id="diamond" style="background:
+#efe9e0"></div> (for rejected initiatives <div id="diamond" style="background:#72302f"></div>).
 
 ## Translation
 
@@ -74,7 +77,7 @@ The referendum, on the other hand, allows parliamentary decisions which have alr
 * In general, people's initatives are most often refused. 
 * 
 
-* [emocratic Infrastructures in the Service of Citizens’ Rights: the Swiss Experience](http://www.liechtenstein-institut.li/contortionist/0/contortionistUniverses/397/rsc/Publikation_downloadLink/LIAP_013.pdf)
+* [Democratic Infrastructures in the Service of Citizens’ Rights: the Swiss Experience](http://www.liechtenstein-institut.li/contortionist/0/contortionistUniverses/397/rsc/Publikation_downloadLink/LIAP_013.pdf)
 * [L’agriculture et la démocratie directe](http://arretsurinfo.ch/lagriculture-et-la-democratie-directe-33/)
 * [wikipedia Voting in Switzerland](https://en.wikipedia.org/wiki/Voting_in_Switzerland)
 * [Principaux référendums en Suisse depuis 1948 au niveau national (fédéral)](http://www.democratiedirecte.fr/2009/12/principaux-referendums-en-suisse-depuis-1948-au-niveau-national-federal/)
@@ -82,6 +85,8 @@ The referendum, on the other hand, allows parliamentary decisions which have alr
 ```{r setup, include=FALSE}
 exploreData <- F
 wordcloud_topN <- 50
+export_worcloudTerms <- T
+teaserWordcloud <- F  
 
 keyw.sub <- c('Environmental_policy', 'Immigration_policy', 'Status_of_women', 
               'Fundamental_rights', 'Pension_insurance', 'Indirect_taxation', 
@@ -94,7 +99,6 @@ keyw.sub <- c('Environmental_policy', 'Immigration_policy', 'Status_of_women',
 data.file <- "data/VOTES_2017_05_30_clean.csv"
 vote.translation.file <- 'input/Swiss national ballots - themes - votes.csv'
 translation.file <- 'input/Swiss national ballots - themes - txt.csv'
-
 
 library(tidyverse)
 library(scales)
@@ -240,12 +244,12 @@ singlePlot <- function(ddd, kw, lang = 'EN') {
       heatmap = list(borderWidth = 3, borderColor = bg.colour, borderRadius = 2,
                      states = list(hover = list(color = "black")))
     ) %>%
-  hc_legend(enabled = F) %>%
+  hc_legend(enabled = F, verticalAlign = "middle") %>%
     hc_add_theme(hc_theme_swi) %>%
     hc_chart(
       animation = F, backgroundColor = bg.colour, height = chart.height, 
-      spacing = list(5,12,9,9), borderRadius = 2,
-      borderColor = "white", borderWidth = 3
+      spacing = list(3.5,12,9,9), borderRadius = 2,
+      borderColor = "white", borderWidth = 2
     ) %>%
     hc_yAxis(
       gridLineWidth = 0, lineColor = 'transparent', min = 1, tickInterval = 1,
@@ -289,7 +293,8 @@ singlePlot <- function(ddd, kw, lang = 'EN') {
 if(exploreData) {
   plots <- lapply(kw.sub, function(kw) singlePlot(ddd, kw))
 
-  source <- paste0(txt["source",lang], ": ", htmlLink("http://c2d.ch", txt["source.name",lang]), " | ", txt["code",lang], ": ",
+  source <- paste0(txt["source",lang], ": ", 
+                   htmlLink("http://c2d.ch", txt["source.name",lang]), " | ", txt["code",lang], ": ",
                    htmlLink("http://jkunst.com/highcharter/", txt["code.name",lang]), " | ",
                    htmlLink("https://twitter.com/duc_qn", "@duc_qn"), " | swissinfo.ch")
   
@@ -322,17 +327,21 @@ for(lang in colnames(txt)) {
                    htmlLink("http://jkunst.com/highcharter/", txt["code.name",lang]), " | ",
                    htmlLink("https://twitter.com/duc_qn", "@duc_qn"), " | swissinfo.ch")
   
-  shapes.path <- list.files(system.file("extdata", package="swiRcharts"), pattern = "shapes\\.css", full.names = T)
+  legend.key <- paste0(
+    img(src = "noBallot.png",  width="22", align="top"), '&nbsp;=&nbsp;', txt['descr.b', lang], ",&nbsp;",
+    img(src = "noInit.png",    width="22", align="top"), '&nbsp;=&nbsp;', txt['descr.d', lang], ",&nbsp;",    
+    img(src = "yesBallot.png", width="22", align="top"), '&nbsp;=&nbsp;', txt['descr.c', lang], ",&nbsp;",
+    img(src = "yesInit.png",   width="22", align="top"), '&nbsp;=&nbsp;', txt['descr.e', lang], "<br>"
+  )
   
   save_html(
     tags$html(
-      tags$head(includeHTML(style_swi_highcharter()), includeCSS(shapes.path)),
+      tags$head(includeHTML(style_swi_highcharter())),
       tags$h2(HTML(txt['main.title', lang])),
-      div(class = "descr", HTML(paste0('<img src="https://interactive.swissinfo.ch/assets/Interactive_icon.svg.png" width="12" align="top">&nbsp; ', txt['descr', lang]))),
-      #tags$h3(HTML(txt['h3', lang])),
+      div(class = "descr", HTML(paste0('<img src="https://interactive.swissinfo.ch/assets/Interactive_icon.svg.png" width="12" align="top">&nbsp; ', txt['descr.a', lang], 
+        '<div style="line-height:70%;"><br></div><em>', legend.key, "</em>"))),
       div(class = "graphic", hw_grid(plots, ncol = 3, rowheight = chart.height)),
       div(id = "cite", HTML(source)),
-      # div(class = "footer", HTML(txt['footer', lang])),
       HTML(iframeresizer)  
     ), background = chart.area.bg, 
     file =  paste0("chVotes_byKeyword_prod_", lang, ".html"), libdir = "js")
@@ -350,24 +359,32 @@ kwf <- kwf[which(kwf >= kwf[wordcloud_topN] )]
 length(kwf)
 
 
-wc <- d3wordcloud(names(kwf), kwf, 
-                  colors = rev(colorRampPalette(c(swi_col[c(2,7,3,6,4,5)], '#f7f5ed'))(length(kwf))),
-                  #colors = sample(c(swi_col[-c(1, length(swi_col))]), length(kwf), T) , 
-                  tooltip = T, padding = 1,
-                  spiral = "rectangular", 
-                  rotate.min = -30, rotate.max = -30, 
-                  rangesizefont = c(10, 35),
-                  height = 530,  font = "Open Sans")
-
-wc$sizingPolicy$defaultWidth <- "100%"
-
-lang <- 'EN'
+for (lang in colnames(txt)) {
+  idx <- match(paste0(gsub("( |,|\\-)", "_", names(kwf)), ".key"), rownames(txt))
+  if(any(is.na(idx))) {
+    stop("\n", "Some theme have no tranlsations ", names(kwf)[which(is.na(idx))])
+  }
+  
+  kwt <- kwf 
+  names(kwt) <- txt[idx, lang]
+  
+  wc <- d3wordcloud(names(kwt), kwt, 
+                    colors = rev(colorRampPalette(c(swi_col[c(2,7,3,6,4,5)], '#f7f5ed'))(length(kwt))),
+                    tooltip = T, padding = 1,
+                    spiral = "rectangular", 
+                    rotate.min = -30, rotate.max = -30, 
+                    rangesizefont = c(10, 33),
+                    height = 530,  font = "Open Sans")
+  
+  wc$sizingPolicy$defaultWidth <- "100%"
+  
+  
   source <- paste0(
     txt["source",lang], ": ", htmlLink("http://c2d.ch", txt["source.name",lang]), 
     " | ", txt["code",lang], ": ", htmlLink("https://github.com/jbkunst/d3wordcloud", "d3wordcloud"), 
     " | swissinfo.ch"
   )            
-
+  
   save_html(
     tags$html(
       tags$head(includeHTML("styles.html")),
@@ -377,7 +394,49 @@ lang <- 'EN'
         div(class="graphic", wc),
         div(id = "cite", HTML(source)),
         HTML(iframeresizer)
-      )), file = paste0("keyword_worldcloud_", lang, ".html"), libdir = "js", background = "#060d13")  
+      )), file = paste0("keyword_worldcloud_", wordcloud_topN, "_", lang, ".html"), libdir = "js", background = "#060d13")    
+}
+
   
+if(export_worcloudTerms) {
+  kw <- tibble(key = gsub("( |,|\\-)", "_", names(kwf)), EN = names(kwf))
+  #filter out keywords that are shown in the 2nd graphic
+  kw %<>% filter(!key %in% keyw.sub) %>% mutate(key = paste0(key, ".key"))
+  write_csv(kw, paste0("input/", "top_", wordcloud_topN, "_keywords.csv"))
+}  
+
+if(teaserWordcloud) {
+  kwt <- data %>% select(starts_with("keyword")) %>% unlist() %>% table()
+  kwt <- kwt[-which(names(kwt) == "none" )]
   
+  teaser <- d3wordcloud(names(kwt), kwt, 
+                  colors = rev(colorRampPalette(c(swi_col[c(2,7,3,6,4,5)], '#f7f5ed'))(length(kwt))),
+                  tooltip = F, padding = 1,
+                  spiral = "rectangular", 
+                  rotate.min = -30, rotate.max = -30, 
+                  rangesizefont = c(8, 30),
+                  height = 500,  font = "Open Sans")
+  teaser$sizingPolicy$defaultWidth <- "100%"
+  
+  save_html(
+    tags$html(
+     # tags$head(includeHTML("styles.html")),
+      tags$body(    
+        div(class="graphic", teaser)
+      )), file = paste0("teaser_worldcloud.html"), libdir = "js", background = "#060d13") 
+}  
 ```
+
+setwd("~/swissinfo/_helpers/teaserify")
+library(magick)
+fg <- image_read('direct-democracy-headline-from-the-leave-campaign.jpg')
+fg <- image_scale(fg, "1840")
+fg <- image_convert(fg, colorspace = "RGB", format = "PNG")
+fg <- image_transparent(fg, "black", fuzz = 200)
+fg <- image_transparent(fg, "white", fuzz = 7000)
+bg <- image_read('teaser.png')
+bg <- image_convert(bg, colorspace = "RGB", format = "PNG")
+bg <- image_background(bg, "black", flatten = TRUE)
+
+bgfg <- image_composite(bg, fg)
+image_write(bgfg, path = "teaserb.png", format = "png")
