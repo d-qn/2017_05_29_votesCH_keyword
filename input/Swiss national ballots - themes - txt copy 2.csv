@@ -1,0 +1,178 @@
+code,EN,FR,DE,IT,PT,AR,RU,ES,JA,ZH
+main.title2,What are the most common themes in Switzerland's federal ballots?,,,,Quais os temas mais comuns nas votações federais da Suíça?,ما هي المواضيع الأكثر شيوعا في الاقتراعات الفدرالية في سويسرا؟,Какими были основные темы федеральных референдумов в Швейцарии?,"
+
+¿Cuáles son los temas más comunes sobre los que votan los suizos?
+
+",,
+descr2,Top 50 keyword themes assigned to all federal ballots in Switzerland since 1848. Word size is scaled according to frequency. Hover over a term to see its count.,,,,Os 50 temas mais importantes presentes em todas as votações nacionais na Suíça desde 1848. O tamanho das letras corresponde à frequência com que o tema aparece ao longo da história. Passe o cursor sobre cada termo para ver sua contagem.,"50 كلمة مفتاحية أكثر حضورا في كافة الإقتراعات الفدرالية التي شهدتها سويسرا منذ عام 1848. حجم الكلمة متناسب مع معدل التردد. مرّر مؤشر الفأرة فوق
+أيّ كلمة للإطلاع على العدد الخاص بها.
+
+","
+
+50 ключевых тем федеральных голосований
+в Швейцарии с 1848 года. Размер шрифта пропорционален частоте голосований, наведите
+курсор на слово, чтобы увидеть число. 
+
+","Los 50 temas más importantes de las votaciones nacionales en Suiza desde 1848. El tamaño de lasletras corresponde a la frecuencia con el que tema aparece a lo largo de la historia. Mueva el cursor sobre cada término para ver el recuento.
+
+",,
+source,Source,source,Quelle,Fonte,Fonte,المصدر,Источник,Fuente,出典,来源
+source.name,Centre for Research on Direct Democracy (c2d),,,,Centre for Research on Direct Democracy ,مركز الأبحاث حول الديمقراطية المباشرة (c2d),"Центр изучения проблем прямой демократии, г. Аарау",Centro de Investigación sobre Democracia Directa (c2d),,
+code,Code,code,Code,Codice,código,الرمز,Код,código,コード,代码
+code.name2,d3wordcloud,d3wordcloud,d3wordcloud,d3wordcloud,d3wordcloud,d3wordcloud,d3wordcloud,d3wordcloud,d3wordcloud,d3wordcloud
+Criminal_law.key,Criminal law,Loi criminelle,Strafrecht,diritto penale,Direito Penal,قانون جنائي,Уголовное право,Derecho penal,刑法,刑法
+Structural_policy.key,Structural policy,La politique structurelle,Die Strukturpolitik,La politica strutturale,Política estrutural,السياسة الهيكلية,Структурная политика,La política estructural,構造政策,结构性政策
+Parliament.key,Parliament,Parlement,Parlament,Parlamento,Parlamento,برلمان,парламент,Parlamento,議会,议会
+Health_and_accident_insurance.key,Health and accident insurance,Assurance maladie et accidents,Kranken- und Unfallversicherung,assicurazione sanitaria e infortuni,Seguro de saúde e de acidentes,الصحة والتأمين ضد الحوادث,Здоровье и страхование от несчастных случаев,seguro de salud y accidente,健康と傷害保険,健康和意外保险
+Financial_system.key,Financial system,Système financier,Finanzsystem,Sistema finanziario,Sistema financeiro,نظام مالي,Финансовая система,Sistema financiero,金融システム,金融系统
+Tax_policy.key,Tax policy,Politique fiscale,Steuerpolitik,La politica fiscale,A política fiscal,السياسة الضريبية,налоговая политика,La política tributaria,租税政策,税收政策
+Addictive_substances.key,Addictive substances,substances addictives,Suchtmittel,sostanze che danno dipendenza,Substâncias que causam dependência,المواد المسببة للإدمان,привыкание вещества,Las sustancias adictivas,中毒性の物質,成瘾物质
+Tax_system.key,Tax system,Régime fiscal,Steuersystem,sistema fiscale,Sistema Tributário,النظام الضريبي,налоговая система,Sistema de impuestos,税制,税制
+Direct_taxation.key,Direct taxation,fiscalité directe,direkte Steuern,fiscalità diretta,Impostos diretos,الضرائب المباشرة,прямое налогообложение,los impuestos directos,直接課税,直接税
+Road_transport.key,Road transport,Transport routier,Straßentransport,Trasporto stradale,Transporte rodoviário,النقل على الطرق,Дорожный транспорт,Transporte por carretera,道路輸送,公路运输
+Monetary_policy.key,Monetary policy,Politique monétaire,Geldpolitik,Politica monetaria,Política monetária,السياسة النقدية,денежно-кредитная политика,La política monetaria,金融政策,货币政策
+Division_of_tasks.key,Division of tasks,Répartition des tâches,Aufgabenteilung,Divisione dei compiti,Divisão de tarefas,تقسيم المهام,Разделение задач,División de tareas,タスクの課,任务分工
+Protection_of_nature_and_cultural_heritage.key,Protection of nature and cultural heritage,Protection de la nature et du patrimoine culturel,Schutz der Natur und Kulturerbe,Protezione della natura e del patrimonio culturale,Proteção da natureza e do patrimônio cultural,حماية الطبيعة والتراث الثقافي,Защита природы и культурного наследия,Protección de la naturaleza y el patrimonio cultural,自然と文化遺産の保護,自然和文化遗产保护
+Road_construction.key,Road construction,Construction de route,Straßenbauarbeiten,Costruzione della strada,Obras viárias,بناء الطرق,Строительство дороги,Construcción vial,道路工事,道路建设
+Agricultural_policy.key,Agricultural policy,politique agricole,Agrarpolitik,La politica agricola,Política agrícola,السياسة الزراعية,Сельскохозяйственная политика,Política agrícola,農業政策,农业政策
+Armed_forces___general.key,Armed forces - general,forces armées - général,Streitkräfte - allgemein,Forze armate - generali,Forças Armadas - Geral,القوات المسلحة - العامة,Вооруженные силы - общие,Fuerzas Armadas - generales,武装勢力 - 一般,武装部队 - 一般
+Health_policy.key,Health policy,Politique de santé,Gesundheitspolitik,Politica sanitaria,Política de saúde,سياسة الصحة,Политика здравоохранения,La política de salud,健康政策,卫生政策
+Tenancy_issues.key,Tenancy issues,problèmes de fermage,Tenancy Fragen,le questioni di locazione,Questões de aluguel,قضايا الإيجار,вопросы Tenancy,cuestiones de tenencia,テナントの問題,租赁问题
+Livestock.key,Livestock,Bétail,Vieh,Bestiame,Gado,ماشية,Домашний скот,Ganado,家畜,家畜
+Pricing_policy.key,Pricing policy,Politique de prix,Preispolitik,Politica dei prezzi,Política de preços,سياسة التسعير,Ценовая политика,Política de precios,価格政策,定价政策
+Citizenship.key,Citizenship,Citoyenneté,Staatsangehörigkeit,Cittadinanza,Cidadania,المواطنة,гражданство,Ciudadanía,市民権,国籍
+Economic_policy.key,Economic policy,Politique économique,Wirtschaftspolitik,Politica economica,Política econômica,السياسة الاقتصادية,Экономическая политика,Política económica,経済政策,经济政策
+Employment_policy.key,Employment policy,Politique de l'emploi,Beschäftigungspolitik,La politica occupazionale,A política de emprego,سياسة العمالة,политика в области занятости,La política de empleo,雇用政策,就业政策
+Legislative_procedure.key,Legislative procedure,procédure législative,Gesetzgebungsverfahren,La procedura legislativa,Processo legislativo,الإجراء التشريعي,Законодательная процедура,procedimiento legislativo,立法手続き,立法程序
+State_security.key,State security,la sécurité de l'Etat,die Sicherheit des Staates,la sicurezza dello Stato,Segurança de Estado,أمن الدولة,госбезопасность,Seguridad Estatal,国家安全保障,国家安全
+Employment_conditions.key,Employment conditions,Les conditions d'emploi,Arbeitsbedingungen,condizioni di lavoro,Condições de trabalho,ظروف العمل,условия труда,Las condiciones de empleo,雇用条件,就业条件
+Refugees.key,Refugees,Réfugiés,Flüchtlinge,rifugiati,Refugiados,اللاجئين,Беженцы,Refugiados,難民,难民
+Short_term_economic_policy.key,Short-term economic policy,la politique économique à court terme,Kurzfristige Wirtschaftspolitik,politica economica a breve termine,Política econômica de curto prazo,السياسة الاقتصادية قصيرة الأجل,Краткосрочная экономическая политика,la política económica a corto plazo,短期的な経済政策,短期经济政策
+Competition_policy.key,Competition policy,La politique de concurrence,Wettbewerbspolitik,La politica della concorrenza,Política de concorrência,سياسة المنافسة,Политика в области конкуренции,La política de competencia,競争政策,竞争政策
+Consumer_protection.key,Consumer protection,La protection des consommateurs,Verbraucherschutz,Protezione del consumatore,Proteção do consumidor,حماية المستهلك,Защита потребителя,Protección al Consumidor,消費者保護,消费者保护
+EU.key,EU,UE,EU,Unione Europea,União Europeia (UE),الاتحاد الأوروبي,ЕС,UE,EU,欧洲联盟
+Family_policy.key,Family policy,La politique familiale,Familienpolitik,La politica familiare,Política familiar,سياسة الأسرة,Семейная политика,La política familiar,家族政策,家庭政策
+Nuclear_energy.key,Nuclear energy,Énergie nucléaire,Kernenergie,Energia nucleare,Energia nuclear,الطاقة النووية,Ядерная энергия,Energía nuclear,核エネルギー,核能
+Social_Policy.key,Social Policy,Politique sociale,Sozialpolitik,Politica sociale,Politica social,السياسة الاجتماعية,социальная политика,Politica social,ソーシャルポリシー,社会政策
+Working_hours.key,Working hours,Heures de travail,Arbeitszeit,Ore lavorative,Horas de trabalho,ساعات العمل,Рабочее время,Horas laborales,労働時間,工作时间
+main.title,What is Switzerland's direct democracy about?,,,,Do que se trata a democracia direta suíça?,ما الذي تعنيه الديمقراطية المباشرة في سويسرا؟,Что такое швейцарская прямая демократия?,¿Qué es la democracia directa en Suiza?,,
+descr.a,"National ballots in Switzerland from 1848 until 2016, for selected themes and by 10 years brackets. ",,,,"Votações nacionais na Suíça de 1848 a 2016, por temas selecionados em espaços de dez anos","الإقتراعات الوطنية في سويسرا من 1848 حتى عام 2016، لمواضيع مُختارة ولكل عشرة أعوام.
+
+",,"Votaciones nacionales en Suiza de 1848 a 2016, por temas seleccionados en espacios de 10 años",,
+descr.b,a referendum (mandatory or optional) with a majority 'no' vote,,,,"Referendo (obrigatório ou facultativo) com maioria de votos ""não""","استفتاء (إجباري أو اختياري) مع أغلبية من الأصوات
+الرافضة
+
+",,Referéndum (obligatorio o facultativo) con mayoría de 'no',,
+descr.c,a referendum with a majority 'yes' vote,,,,"Referendo (obrigatório ou facultativo) com maioria de votos ""sim""","استفتاء (إجباري أو اختياري) مع أغلبية من الأصوات المؤيدة
+
+",,Referéndum (obligatorio o facultativo) con mayoría de 'sí',,
+descr.d,a rejected people's initative,,,,Iniciativa popular rejeitada,مبادرة شعبية مرفوضة ,отклоненная народная законодательная инициатива,Iniciativa popular rechazada,,
+descr.e,an accepted people's initiative,,,,Iniciativa popular aprovada,مبادرة شعبية مقبولة ,одобренная народная инициатива,Iniciativa popular aprobada,,
+tp.yes,Yes,Ja,Oui,Sì,Sim,نعم,Да,Sí,賛成,赞成
+tp.turnout,Turnout,Stimmbeteiligung,Participation,Partecipazione,Participação,نسبة المشاركة,Участие,Participación,投票率,参与率
+tp.accepted,Accepted,angenommen,accepté,accettato,aprovado,تمت الموافقة عليه,Одобрено,aceptado,可決,通过
+tp.refused,Rejected,abgelehnt,rejeté,respinto,rejeitado,تم رفضه,Отклонено,rechazado,否決,否决
+title.initiative,People's initiatives,Volksinitiativen,Initiatives populaires,Iniziative popolari,Iniciativas populares,مبادرات شعبية,Народная законодательная инициатива,Iniciativas populares,イニシアチブ（国民発議）,公民动议
+title.mandatoryReferendum,Mandatory referendums,Obligatorische Referenden,Référendums obligatoires,Referendum obbligatori,Referendo obrigatório,استفتاءات إجبارية,Обязательный референдум,Referéndums obligatorios,強制的レファレンダム,强制复决
+title.facultativeReferendum,Optional referendums,Fakultative Referenden,Référendums facultatifs,Referendum facoltativi,Referendo facultativo,استفتاءات اختيارية,Факультативный референдум,Referéndums facultativos,任意のレファレンダム,公民复决
+tp.outcome,Outcome,,,,Resultado,النتيجة,Результат,Resultado,,
+Environmental_policy.key,Environmental policy,,,,Política ambiental,سياسة بيئية ,"
+
+Экологическая политика
+
+
+
+
+
+",Política medioambiental,,
+Environmental_policy.sub,Environment has been a big theme in Swiss ballots over the last 40 years.<br/><br/><small><i>Note the different people's initiatives which were accepted.,,,,O meio-ambiente tem sido um grande tema nas votações suíças nos últimos 40 anos.<br/><br/><small><i>Repare as diferentes iniciativas populares que foram aprovadas.,"على مدى الأربعين عاما الأخيرة، كانت البيئة من القضايا الكبرى في الإقتراعات السويسرية. <br/><br/><small><i> لاحظ مختلف المبادرات الشعبية التي حظيت بالقبول.
+
+
+","
+Экология была
+серьезной темой швейцарских референдумов за последние 40 лет. <br/>
+<br/> <small> <i> Обратите внимание на различные народные инициативы,
+которые были приняты.",El medio ambiente ha sido un tema recurrente en las votaciones suizas en los últimos 40 años.<br/><br/><small><i>Fíjese en las iniciativas populares que fueron aprobadas.,,
+Immigration_policy.key,Immigration policy,,,,Política migratória,سياسة الهجرة ,Миграционная политика,Política de inmigración,,
+Immigration_policy.sub,"Lately, the Swiss have been nearly as concerned with the environment as with the rising immigrant population.<br/> <br/><small><i>Note the two people's initiatives accepted by Swiss citizens since 2010.",,,,"Recentemente, os suíços têm se mostrado quase tão preocupados com o meio-ambiente quanto com a crescente população imigrante..<br/> <br/><small><i>Repare as duas iniciativas populares aprovadas pelos cidadãos suíços desde 2010.","إجمالا، أعرب السويسريون عن نفس القدر من الإنشغال
+بقضايا البيئة وبالإرتفاع المُطرد في أعداد المهاجرين. <br/> <br/><small><i>لاحظ المبادرتين الشعبيتين اللتين حظيتا بتأييد المواطنين السويسريين منذ
+عام 2010. 
+
+","В последнее время
+швейцарцы почти так же сильно обеспокоены проблемами экологии, как и ростом иммиграции.
+<br/> <br/> <small> <i> Обратите внимание на две
+народные инициативы, принятые швейцарскими гражданами с 2010 года.
+","Recientemente, los suizos se han mostrado casi tan preocupados con el medio ambiente como con la creciente población inmigrante. .<br/> <br/><small><i>Fíjese en las dos iniciativas populars que los ciudadanos suizos aprobaron desde 2010.",,
+Status_of_women.key,Status of women,,,,Status das mulheres,وضع المرأة ,Статус женщины,Derechos fundamentales,,
+Status_of_women.sub,"Women's suffrage at the federal level was introduced only in 1971 with a mandatory referendum.<br/> <br/><small>It has been a prevalent theme since, although not all ballots represented here are specifically about women's emancipation. For instance, the Swiss voted multiple times regarding abortion. ",,,,"O sufrágio feminino em escala federal foi introduzido só em 1971 por meio de um referendo obrigatório.<br/> <br/><small>Ele virou um tema recorrente desde então, apesar de que nem todas as votações aqui eram sobre emancipação feminina. Por exemplo, os suíços votaram diversas vezes sobre o aborto.","لم يتم إقرار حق التصويت للنساء على المستوى الفدرالي إلا في عام 1971 عن طريق آلية الإستفتاء الإلزامي. <br/>
+<br/><small>منذ ذلك الحين، تحول إلى قضية سائدة على الرغم من أن جميع الإقتراعات المُشار إليها هنا لا تتعلق بتحرير المرأة. على سبيل المثال، صوّت
+السويسريون في عدة مناسبات على مسألة الإجهاض.  
+
+","Женское избирательное право на федеральном уровне было введено только в 1971 году на обязательном референдуме. <br/> <br/> <small> «Женский вопрос» часто ставили на голосование, хотя не всегда речь шла именно о женской эмансипации. Например, швейцарцы много раз голосовали по абортам.","Un tema recurrente en las votaciones suizas.<br/><br/>Pero no todas las votaciones fueron para ampliar los derechos fundamentales. Por ejemplo, las últimas dos iniciativas populares aprobadas en las urnas restringieron los derechos de los extranjeros.",,
+Fundamental_rights.key,Fundamental rights,,,,Direitos fundamentais,حقوق أساسية ,Основные права,,,
+Fundamental_rights.sub,"A consistent popular theme in Swiss ballots.<br/><br/>But not all votes were to increase fundamental rights, for instance the last two accepted people's initiatives were to limit foreigners' rights.",,,,"Um tema bastante popular e constante nas votações suíças.<br/><br/>Mas nem todas as votações eram para expandir os direitos fundamentais; por exemplo, as últimas duas iniciativas populares aprovadas eram para limitar os direitos dos estrangeiros.","موضوع شعبي ثابت في الإقتراعات السويسرية. <br/><br/>إلا أن كل الإقتراعات
+لم تكن تهدف إلى زيادة الحقوق الأساسية، فعلى سبيل المثال تعلقت آخر مبادرتين
+شعبيتين تمت المصادقة عليهما بالحدّ من حقوق الأجانب.   
+
+","Постоянная популярная тема в швейцарских избирательных бюллетенях. <br/> <br/> Однако не всегда швейцарцы голосовали за расширение основных прав: например, последние две принятые инициативы требовали ограничения прав иностранцев.",,,
+Pension_insurance.key,Pension insurance,,,,Aposentadoria,المعاشات التقاعدية ,Пенсионное обеспечение,,,
+Pension_insurance.sub,"Faced with an ageing population, there have been numerous votes on pensions over the last 20 years.<br/><br/><small>But all people's initiatives regarding pensions have been rejected.",,,,"Face a uma população envelhecendo, houve várias votações sobre aposentadoria nos últimos 20 anos.<br/><br/><small>Sem muito sucesso, todas as iniciativas populares sobre aposentadoria foram rejeitadas.","في مواجهة تشيّخ السكان، نظمت العديد من الإقتراعات بخصوص المعاشات التقاعدية في سويسرا على مدى السنوات العشرين الماضية. <br/><br/><small>إلا أنه تم رفض جميع المبادرات الشعبية المتعلقة بهذا الصنف من العلاوات من طرف
+الناخبين.
+
+","Ввиду проблемы
+старения населения за последние 20 лет швейцарцы многократно голосовали по
+пенсиям. <br/> <br/> <small> Но все народные инициативы,
+касающиеся пенсий, были отклонены.",,,
+Indirect_taxation.key,Indirect taxation,,,,Tributação indireta,الضرائب غير المباشرة,Непрямое налогообложение,,,
+Indirect_taxation.sub,"Through people's initiatives, there have many unsuccessful attempts to change how to tax goods and services.",,,,"Por meio de iniciativas populares, houve várias tentativas frustradas para mudar a taxação de bens e serviços.","من خلال مبادرات شعبية، جرت العديد من المحاولات الفاشلة
+لتغيير كيفية فرض الضرائب والرسوم على السلع والخدمات.
+
+","
+
+Множество народных
+инициатив стали – неудачными – попытками изменить порядок налогообложения
+товаров и услуг. 
+
+",,,
+Intergovernmental_relations.key,Intergovernmental relations,,,,Relações intergovernamentais,العلاقات مع الحكومات ,Межправительственные отношения,,,
+Intergovernmental_relations.sub,"Given its federalism, Switzerland regularly voted on the relationship between cantons and the federal government.",,,,"Dado o seu federalismo, a Suíça tem votado regularmente sobre as relações entre cantões e União.","بحكم اعتمادها النظام الفدرالي، تم التصويت في سويسرا بانتظام
+على مسائل ترتبط بالعلاقة بين الكانتونات والحكومة الفدرالية.
+
+","
+
+Федеративное
+государство, Швейцария регулярно голосовала по вопросам взаимоотношений между
+кантонами и федеральным центром. 
+
+",,,
+Budget_cuts_and_remediation_measures.key,Budget cuts and remediation measures,,,,Cortes orçamentários e medidas compensatórias,تخفيضات الميزانية وتدابير المعالجة,Бюджетные сокращения и меры компенсации,,,
+Children_and_young_people.key,Children and young people,,,,Crianças e jovens,الأطفال واليافعون والشبان ,Дети и молодежь,,,
+Children_and_young_people.sub,There have only recently been referendums about children and the young.,,,,Muito pouco interesse por crianças ou jovens nas urnas até recentemente.,"لم يتم إجراء استفتاءات بخصوص الأطفال والشباب إلا في
+الفترة الأخيرة. 
+
+",Темы детей и молодежи стали выноситься на референдумы относительно недавно ,,,
+Arms.key,Arms,,,,Armas,أسلحة ,Оружие,,,
+Arms.sub,The weapons trade has regularly come under the scrutiny of people's initiatives.,,,,O comércio de armas é um tema constante para escrutínio de iniciativas populares. ,"تتعرض تجارة الأسلحة بانتظام للفحص والتقييم بواسطة
+المبادرات الشعبية. 
+
+",Торговля оружием неоднократно становилась темой референдумов,,,
+National_economic_supply.key,National economic supply,,,,Oferta econômica nacional,إمدادات الإقتصاد الوطني ,Национальное экономическое снабжение,,,
+National_economic_supply.sub,"Food self-sufficiency used to be a concern.",,,,Autosuficiência alimentar costumava existir,الإكتفاء الذاتي من الغذاء كان على الدوام مصدر قلق,"Вызывало беспокойство, хватит ли на
+всех продуктов питания. ",,,
+Crop_production.key,Crop production,,,,Safras,~نتاك المحاصيل ,Растениеводство,,,
+Referendum.key,Referendum,,,,Referendo,استفتاء,Референдум,,,
+Referendum.sub,"The Swiss like polls so much, they regularly voted on how to modifiy their direct democracy or electoral system.",,,,Os suíços gostam tanto de eleições que eles votam regularmente para modificar sua democracia direta ou o sistema eleitoral.,"يهوى السويسريون التصويت والتعبير عن آرائهم، لذلك صوّتوا
+بشكل بانتظام على كيفية تعديل ديمقراطيتهم المباشرة أو نظامهم الإنتخابي.
+
+ 
+
+","
+
+Швейцарцы обожают
+высказывать свое мнение. Они регулярно голосовали по вопросам, как изменить собственную
+систему прямой демократии или избирательную систему.
+
+",,,
+Electoral_system.key,Electoral system,,,,Sistema eleitoral,النظام الإنتخابي,Избирательная система,,,
+Government__administration.key,"Government, administration",,,,"Governo, gestão",الحكطومة، الإدارة ,"Правительство, администрация",,,
+code.name,Highcharter,Highcharter,Highcharter,Highcharter,Highcharter,Highcharter,Highcharter,Highcharter,Highcharter,Highcharter
